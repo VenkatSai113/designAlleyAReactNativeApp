@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "717468483858",
+    "project_id": "reactnativeotpdesignalley",
+    "storage_bucket": "reactnativeotpdesignalley.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717468483858:android:90d79069492f1cc7d0f3cb",
+        "android_client_info": {
+          "package_name": "com.venkatsai113.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsY4psHjXVPoS6mus8f8JRpSvsgse_daE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
