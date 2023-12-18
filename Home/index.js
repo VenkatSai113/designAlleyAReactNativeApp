@@ -15,6 +15,7 @@ import FeedContainer from './FeedContainer'
 const Home=()=>{
 
   const [feedDetails,setFeedDetails]=useState([])
+  const [loginUser,setLoginUser]=useState('')
   useEffect(()=>{
     const getJwtToken=async()=>{
     const jwtToken = await AsyncStorage.getItem('jwtToken');
@@ -31,11 +32,30 @@ const Home=()=>{
     }
     const response=await fetch(feedUrl,options);
     const data=await response.json();
-    setFeedDetails(data)
-    console.log(data,"datadatadata\datadatadatadata")
-  
+    setFeedDetails(data)  
     }
     getJwtToken()
+    const logedInUser=async()=>{
+        const jwtToken = await AsyncStorage.getItem('jwtToken');
+        const logUrl="http://192.168.1.26:9000/logedInUser"
+    const options={
+        method:"GET",
+        headers:{
+            "Content-Type":"Application/json",
+            "Authorization":`Bearer ${jwtToken}`
+        }
+       
+    }
+    const response=await fetch(logUrl,options);
+    const data1=await response.json();
+    if(response.ok===true){
+        setLoginUser(data1)
+        console.log(data1,'data111')
+    }
+   
+ 
+    }
+    logedInUser()
 },[])
   const navigation = useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
@@ -58,7 +78,7 @@ const Home=()=>{
          
             <ScrollView >
               {feedDetails.map(eachItem=>
-                  <FeedContainer stateFeed={eachItem} key={eachItem.postId} />
+                  <FeedContainer stateFeed={eachItem} key={eachItem.postId} loginUser={loginUser} />
               )}
          
             </ScrollView>

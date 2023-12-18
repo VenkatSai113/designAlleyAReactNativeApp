@@ -11,16 +11,24 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SwipeableViews from 'react-swipeable-views-native';
 import { Video, ResizeMode } from 'expo-av';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 const FeedContainer=(props)=>{
     const video = React.useRef(null);
-    const {stateFeed}=props
-    console.log(stateFeed,'stateFeedstateFeed')
+    const {stateFeed,loginUser}=props
+
     const {deignerName,postId,caption,likes,logo, designerId,thumbnail,postType,createdAt,tags,designStyle,category,location,occupancy,propertySize,duration,designerLogo,userId,tourId}=stateFeed
     const splitedImages=thumbnail.split(",")
     const [status, setStatus] = React.useState({});
     const navigation = useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
+    const [savePostStatue,setSavePostStatue]=useState(false);
+    const [likePostStatus,setLikePostStatus]=useState(false);
+    useEffect(()=>{
+        loginUser.designer_id===userId?setSavePostStatue(true):setSavePostStatue(false)
+        console.log(savePostStatue)
+
+    },[])
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
@@ -32,6 +40,48 @@ const FeedContainer=(props)=>{
         return null; // Return a loading indicator or placeholder
       }
     const screenWidth=Dimensions.get("window").width
+    const onPressSave=async()=>{
+        const jwtToken=await AsyncStorage.getItem('jwtToken');
+        setSavePostStatue(!savePostStatue) 
+        console.log(savePostStatue,"ioyuioyuioyuio")
+       
+        const postIds={postId,hello:"hello"}
+        const savedApiUrl="http://192.168.1.26:9000/deleteSavedPost";
+        const options={
+          method:"post",
+          headers:{
+            "Content-Type":"Application/json",
+            "Authorization":`Bearer ${jwtToken}`
+          },
+        //   mode:"cors",
+          body:JSON.stringify(postIds)
+        }
+        const response=await fetch(savedApiUrl,options)
+        const data=await response.json()
+    }
+    const onPressUnSave=async()=>{
+        const jwtToken=await AsyncStorage.getItem('jwtToken')
+        setSavePostStatue(!savePostStatue)
+        console.log(savePostStatue,"ioyuioyuioyuio")
+       
+        const postIds={postId,hello:"hello"}
+        const savedApiUrl="http://192.168.1.26:9000/savedPost";
+        const options={
+          method:"post",
+          headers:{
+            "Content-Type":"Application/json",
+            "Authorization":`Bearer ${jwtToken}`
+          },
+        //   mode:"cors",
+          body:JSON.stringify(postIds)
+        }
+        const response=await fetch(savedApiUrl,options)
+        const data=await response.json()
+    }
+    const onPressLike=()=>{
+        setLikePostStatus(!likePostStatus)
+    }
+
     return(
         <View >
         <View style={[styles.homeMainContainer, screenWidth<786?{width:wp('95%'),marginLeft:wp('2%')}:{width:wp ('50%'),marginLeft:wp('2%')}]}>
@@ -49,7 +99,6 @@ const FeedContainer=(props)=>{
 <SwipeableViews style={styles.slideContainer}>
 {splitedImages.map(eachImage=>{
           if(eachImage.split(".")[1]=="mp4"){
-            console.log(eachImage)
             return(
                 <Video
                 ref={video}
@@ -97,7 +146,7 @@ const FeedContainer=(props)=>{
             
            <View style={styles.homeBottomProfileView}>
             <View style={styles.profileNameView}>
-            <Image  onPress={() => console.log("Hello")}  source={{uri:`http://192.168.1.26:9000/${logo}`}}  style={screenWidth>786?styles.profileImage:styles.smallScreenProfileImage}/>
+            <Image    source={{uri:`http://192.168.1.26:9000/${logo}`}}  style={screenWidth>786?styles.profileImage:styles.smallScreenProfileImage}/>
             <View style={styles.profileNameTime}>
             <Text style={styles.designerName}>{deignerName}</Text>
             <Text style={styles.timeText}>1 day ago</Text>
@@ -106,8 +155,14 @@ const FeedContainer=(props)=>{
             </View>
               <View>
                 <View style={styles.heartView}>
-                    <Feather name="bookmark" style={styles.saveIcon}/>
+                    {savePostStatue?<TouchableOpacity onPress={onPressSave}><FontAwesome name="bookmark" style={styles.saveIcon}/></TouchableOpacity>:<TouchableOpacity onPress={onPressUnSave}><Feather name="bookmark" style={styles.saveIcon}/>
+                    </TouchableOpacity>}
+                    {likePostStatus?<TouchableOpacity onPress={onPressLike}>
+                    <AntDesign name="heart" style={styles.unlikeIcon}/>
+                    </TouchableOpacity>:<TouchableOpacity onPress={onPressLike}>
                     <AntDesign name="hearto" style={styles.heartIcon}/>
+                    </TouchableOpacity>}
+                    
                     <MaterialCommunityIcons name="dots-vertical" style={styles.saveIcon}  onPress={toggleModal} />
                 </View>
             </View>               
@@ -117,7 +172,45 @@ const FeedContainer=(props)=>{
 #{postType} #{tags} #{designStyle} #{category} #{location} #{occupancy} #{propertySize}#{duration}</Text>
 
           </View>
-        </View>  
+        </View> 
+        <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={toggleModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        style={styles.modal}>
+        <View style={styles.modalContent}>
+            <View style={styles.popupModelView}>
+            <TouchableOpacity onPress={toggleModal}>
+            
+            <AntDesign name="closecircle" style={styles.closeIcon}/>
+          </TouchableOpacity>
+                <View style={styles.popupModalRowView}>
+                    <AntDesign name="edit" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Edit Post</Text>
+                </View>
+                <View style={styles.popupModalRowView}>
+                    <AntDesign name="delete" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Delete Post</Text>
+                </View><View style={styles.popupModalRowView}>
+                    <AntDesign name="sharealt" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Share Post</Text>
+                </View><View style={styles.popupModalRowView}>
+                    <AntDesign name="clockcircleo" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Archive</Text>
+                </View>
+                <View style={styles.popupModalRowView}>
+                    <AntDesign name="hearto" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Add to collection</Text>
+                </View>
+                <View style={styles.popupModalRowView}>
+                    <Feather name="send" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Send</Text>
+                </View>
+            </View>
+         
+        </View>
+      </Modal> 
         </View>
        
     )
@@ -253,6 +346,12 @@ const styles=StyleSheet.create({
         fontSize:22,
         marginRight:7
     },
+    unlikeIcon:{
+        marginLeft:15,
+        fontSize:22,
+        marginRight:7,
+        color:'red'  
+    },
     mainColumnView:{
         flex:1,
         flexDirection:'column',
@@ -268,5 +367,32 @@ const styles=StyleSheet.create({
        
         height:200,
         width:100
+    },
+    popupModelView:{
+        display:'flex',
+        flexDirection:'column',
+        
+    },
+    popupModalRowView:{
+        width:wp('100%'),
+        display:'flex',
+        flexDirection:'row',
+      
+    },
+    editIcon:{
+        fontSize:17,
+        fontWeight:'bold',
+        marginBottom:20
+    },
+    editPostText:{
+        fontSize:16,
+        marginLeft:20,
+        marginBottom:20,
+      
+    },
+    closeIcon:{
+        fontSize:25,
+        color:'#ca9881',
+        marginLeft:'auto'
     }
 })
