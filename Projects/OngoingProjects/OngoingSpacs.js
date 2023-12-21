@@ -31,7 +31,7 @@ const OngoingSpace=({navigation})=>{
         console.log(projectId)
         setProjectId(projectId)
         const spaceDetails={projectId,hello:"hello"}
-        const apiUrl="http://192.168.1.26:9000/spaceCards";
+        const apiUrl="http://192.168.1.44:9000/spaceCards";
         const options={
           method:'POST',
           headers:{
@@ -103,7 +103,7 @@ const OngoingSpace=({navigation})=>{
             console.log(pair[0]+ ', ' + pair[1]); 
           }
       
-          const response = await axios.post('http://192.168.1.26:9000/createSpaces', formData, {
+          const response = await axios.post('http://192.168.1.44:9000/createSpaces', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },

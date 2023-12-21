@@ -26,7 +26,7 @@ const ProductDetailView=()=>{
             const productId=JSON.parse(parseProductId)
             const jwtToken=await AsyncStorage.getItem('jwtToken')
             const productDetails={productId,hello:"hello"}
-            const apiUrl='http://192.168.1.26:9000/productDetailview'
+            const apiUrl='http://192.168.1.44:9000/productDetailview'
             const options={
                 method:'POST',
                 headers:{
@@ -54,9 +54,9 @@ const ProductDetailView=()=>{
           
                 <View style={ deviceSize === 'large'?     {display:'flex',flexDirection:'row',}:{display:'flex',flexDirection:'column',}}>
                     {productImages.length===1?
-                     <Image source={{uri:`http://192.168.1.26:9000/${productImages[0]}`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
+                     <Image source={{uri:`http://192.168.1.44:9000/${productImages[0]}`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
                     :<SwipeableViews>{productImages.map(eachProduct=>
-                        <Image source={{uri:`http://192.168.1.26:9000/${eachProduct}`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
+                        <Image source={{uri:`http://192.168.1.44:9000/${eachProduct}`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
                             )}</SwipeableViews>
                             }
                     
@@ -130,7 +130,7 @@ const ProductDetailView=()=>{
                 
               {/* <Row>
                 <Col md={6}>
-               <Image source={{uri:"http://192.168.1.26:9000/feedUploads/1691661773771_31 - Copy.jpg"}} resizeMode='contain' style={[styles.productImage,Platform.OS==='web' && styles.webProductImage]} />
+               <Image source={{uri:"http://192.168.1.44:9000/feedUploads/1691661773771_31 - Copy.jpg"}} resizeMode='contain' style={[styles.productImage,Platform.OS==='web' && styles.webProductImage]} />
                 </Col>
                 <Col md={6} style={{backgroundColor:'red'}}>
                     <View style={{width:wp('90%'),display:'flex',flexDirection:'row',justifyContent:'space-between',marginLeft:20,}}>

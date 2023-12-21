@@ -29,7 +29,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiBaseUrl": "http://192.168.1.26:9000/",
+      "apiBaseUrl": "http://192.168.1.44:9000/",
       "eas": {
         "projectId": "84fb3f92-496b-406d-a255-7232cef7343f"
       }

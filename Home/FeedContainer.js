@@ -22,6 +22,7 @@ const FeedContainer=(props)=>{
     const [status, setStatus] = React.useState({});
     const navigation = useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
+    const [commentModal,setCommentModal]=useState(false)
     const [savePostStatue,setSavePostStatue]=useState(false);
     const [likePostStatus,setLikePostStatus]=useState(false);
     useEffect(()=>{
@@ -29,9 +30,13 @@ const FeedContainer=(props)=>{
         console.log(savePostStatue)
 
     },[])
+    
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
+    const toggleCommentModal=()=>{
+        setCommentModal(!commentModal)
+    }
     let [fontsLoaded] = useFonts({
         'Roboto-Regular': Roboto_400Regular,
       });
@@ -46,7 +51,7 @@ const FeedContainer=(props)=>{
         console.log(savePostStatue,"ioyuioyuioyuio")
        
         const postIds={postId,hello:"hello"}
-        const savedApiUrl="http://192.168.1.26:9000/deleteSavedPost";
+        const savedApiUrl="http://192.168.1.44:9000/deleteSavedPost";
         const options={
           method:"post",
           headers:{
@@ -65,7 +70,7 @@ const FeedContainer=(props)=>{
         console.log(savePostStatue,"ioyuioyuioyuio")
        
         const postIds={postId,hello:"hello"}
-        const savedApiUrl="http://192.168.1.26:9000/savedPost";
+        const savedApiUrl="http://192.168.1.44:9000/savedPost";
         const options={
           method:"post",
           headers:{
@@ -86,16 +91,16 @@ const FeedContainer=(props)=>{
         <View >
         <View style={[styles.homeMainContainer, screenWidth<786?{width:wp('95%'),marginLeft:wp('2%')}:{width:wp ('50%'),marginLeft:wp('2%')}]}>
         {/* {splitedImages.length===1 &&postType=="image"?<TouchableOpacity  >
-           <Image    source={{uri:`http://192.168.1.26:9000/${thumbnail}`}}  style={styles.feedImage}/>
+           <Image    source={{uri:`http://192.168.1.44:9000/${thumbnail}`}}  style={styles.feedImage}/>
           </TouchableOpacity>:
           <SwipeableViews style={styles.slideContainer}>
              {splitedImages.map(eachImage=>
-                <Image    source={{uri:`http://192.168.1.26:9000/${eachImage}`}}  style={styles.feedImage}/>
+                <Image    source={{uri:`http://192.168.1.44:9000/${eachImage}`}}  style={styles.feedImage}/>
                 )}
             </SwipeableViews>} */}
             
           
-{(postType =="image" || "imageVideo" || "virlTourImage") ?  ((splitedImages.length===1 &&postType=="image")?  <Image source={{uri:`http://192.168.1.26:9000/${thumbnail}`}}  style={styles.feedImage}/>:
+{(postType =="image" || "imageVideo" || "virlTourImage") ?  ((splitedImages.length===1 &&postType=="image")?  <Image source={{uri:`http://192.168.1.44:9000/${thumbnail}`}}  style={styles.feedImage}/>:
 <SwipeableViews style={styles.slideContainer}>
 {splitedImages.map(eachImage=>{
           if(eachImage.split(".")[1]=="mp4"){
@@ -103,7 +108,7 @@ const FeedContainer=(props)=>{
                 <Video
                 ref={video}
                 
-                source={{uri:`http://192.168.1.26:9000/${eachImage}`}} 
+                source={{uri:`http://192.168.1.44:9000/${eachImage}`}} 
                 useNativeControls
                 resizeMode='contain'
                 isLooping
@@ -113,7 +118,7 @@ const FeedContainer=(props)=>{
             )}
             else{
                 return(
-                <Image source={{uri:`http://192.168.1.26:9000/${eachImage}`}}  style={styles.feedImage}/>
+                <Image source={{uri:`http://192.168.1.44:9000/${eachImage}`}}  style={styles.feedImage}/>
                 )
             }
             })}
@@ -125,7 +130,7 @@ const FeedContainer=(props)=>{
            <Video
            ref={video}
            
-           source={{uri:`http://192.168.1.26:9000/${eachImage}`}} 
+           source={{uri:`http://192.168.1.44:9000/${eachImage}`}} 
            useNativeControls
            resizeMode='contain'
            isLooping
@@ -135,7 +140,7 @@ const FeedContainer=(props)=>{
            )}</SwipeableViews></>:  <Video
            ref={video}
            
-           source={{uri:`http://192.168.1.26:9000/${eachImage[0]}`}} 
+           source={{uri:`http://192.168.1.44:9000/${eachImage[0]}`}} 
            useNativeControls
            resizeMode='contain'
            isLooping
@@ -146,7 +151,7 @@ const FeedContainer=(props)=>{
             
            <View style={styles.homeBottomProfileView}>
             <View style={styles.profileNameView}>
-            <Image    source={{uri:`http://192.168.1.26:9000/${logo}`}}  style={screenWidth>786?styles.profileImage:styles.smallScreenProfileImage}/>
+            <Image    source={{uri:`http://192.168.1.44:9000/${logo}`}}  style={screenWidth>786?styles.profileImage:styles.smallScreenProfileImage}/>
             <View style={styles.profileNameTime}>
             <Text style={styles.designerName}>{deignerName}</Text>
             <Text style={styles.timeText}>1 day ago</Text>
@@ -154,6 +159,7 @@ const FeedContainer=(props)=>{
             </View>
             </View>
               <View>
+                
                 <View style={styles.heartView}>
                     {savePostStatue?<TouchableOpacity onPress={onPressSave}><FontAwesome name="bookmark" style={styles.saveIcon}/></TouchableOpacity>:<TouchableOpacity onPress={onPressUnSave}><Feather name="bookmark" style={styles.saveIcon}/>
                     </TouchableOpacity>}
@@ -161,17 +167,22 @@ const FeedContainer=(props)=>{
                     <AntDesign name="heart" style={styles.unlikeIcon}/>
                     </TouchableOpacity>:<TouchableOpacity onPress={onPressLike}>
                     <AntDesign name="hearto" style={styles.heartIcon}/>
-                    </TouchableOpacity>}
                     
+                    </TouchableOpacity>}
                     <MaterialCommunityIcons name="dots-vertical" style={styles.saveIcon}  onPress={toggleModal} />
                 </View>
+                
             </View>               
            </View>
+           
            <View>
             <Text style={styles.postDescription}>{caption}
 #{postType} #{tags} #{designStyle} #{category} #{location} #{occupancy} #{propertySize}#{duration}</Text>
 
           </View>
+        <TouchableOpacity onPress={toggleCommentModal}>
+            <Text  style={{ fontSize:14,fontWeight:"normal",padding:5,marginLeft:5}}>View all comments</Text>
+        </TouchableOpacity>
         </View> 
         <Modal
         isVisible={isModalVisible}
@@ -182,7 +193,6 @@ const FeedContainer=(props)=>{
         <View style={styles.modalContent}>
             <View style={styles.popupModelView}>
             <TouchableOpacity onPress={toggleModal}>
-            
             <AntDesign name="closecircle" style={styles.closeIcon}/>
           </TouchableOpacity>
                 <View style={styles.popupModalRowView}>
@@ -207,6 +217,43 @@ const FeedContainer=(props)=>{
                     <Feather name="send" style={styles.editIcon}/>
                 <Text style={styles.editPostText}>Send</Text>
                 </View>
+            </View>
+         
+        </View>
+      </Modal> 
+      <Modal
+        isVisible={commentModal}
+        onBackdropPress={toggleCommentModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        style={styles.modal}>
+        <View style={styles.modalContent}>
+            <View style={styles.popupModelView}>
+            <TouchableOpacity onPress={toggleCommentModal}>
+            <AntDesign name="closecircle" style={styles.closeIcon}/>
+          </TouchableOpacity>
+                {/* <View style={styles.popupModalRowView}>
+                    <AntDesign name="edit" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Edit Post</Text>
+                </View>
+                <View style={styles.popupModalRowView}>
+                    <AntDesign name="delete" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Delete Post</Text>
+                </View><View style={styles.popupModalRowView}>
+                    <AntDesign name="sharealt" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Share Post</Text>
+                </View><View style={styles.popupModalRowView}>
+                    <AntDesign name="clockcircleo" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Archive</Text>
+                </View>
+                <View style={styles.popupModalRowView}>
+                    <AntDesign name="hearto" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Add to collection</Text>
+                </View>
+                <View style={styles.popupModalRowView}>
+                    <Feather name="send" style={styles.editIcon}/>
+                <Text style={styles.editPostText}>Send</Text>
+                </View> */}
             </View>
          
         </View>

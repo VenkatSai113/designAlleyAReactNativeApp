@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { StyleSheet, ScrollView, Text, View,Dimensions } from 'react-native'
 import PieChart from 'react-native-pie-chart'
+import Topbar from '../Home/topbar';
 
 export default class Dashboard extends Component {
   render() {
@@ -11,6 +12,7 @@ export default class Dashboard extends Component {
     const deviceSize= Dimensions.get('window').width
     return (
       <ScrollView style={{ flex: 1 }}>
+        <Topbar/>
         <View style={styles.container}>
           <Text style={styles.title}>Overview</Text>
           <PieChart widthAndHeight={widthAndHeight} series={series} sliceColor={sliceColor} />

@@ -34,6 +34,9 @@ import Payments from './Payments/index'
 import AllEstimates from './Estimates/index'
 import Activity from './Activity/index'
 import Notifications from './Notifications/index'
+import SavedPosts from './SavedPosts/index'
+import SavedPostHome from './Home/savedPosts'
+import UserProfileEditor from './SampleImageUpload/index'
 
 const StoreStackScreen = () => (
   <HomeStack.Navigator>
@@ -44,7 +47,7 @@ const StoreStackScreen = () => (
 );
 const ProjectStackScreen=()=>(
   <HomeStack.Navigator>
-  <HomeStack.Screen name="Home" component={Home} />
+ <HomeStack.Screen name="Projects" component={Projects} />
   <HomeStack.Screen name="UpcomingProjects" component={UpcomingProjects} />
   <HomeStack.Screen name="OngoingProjects" component={OngoingProjects} />
   <HomeStack.Screen name="UpcomingSpacesses" component={UpcomingSpacesses} />
@@ -52,13 +55,28 @@ const ProjectStackScreen=()=>(
   <HomeStack.Screen name='OngoingSpace' component={OngoingSpace} />
   <HomeStack.Screen name='FinalizedDesigns' component={FinalizedDesigns} />
 </HomeStack.Navigator>
-)
+);
 const HomeStackScreen=()=>(
   <HomeStack.Navigator>
-  <HomeStack.Screen name="Home" component={Home} />
+  <HomeStack.Screen name="Home" component={Home}  options={{headerShown: false}}/>
+  <HomeStack.Screen name="Dashboard" component={Dashboard} options={{headerShown: false}} />
+  <HomeStack.Screen name="SideProfile" component={SideProfile}  />
+  <HomeStack.Screen name="SavedPosts" component={SavedPosts} />
+  <HomeStack.Screen name="savedpostHome" component={SavedPostHome} />
   <HomeStack.Screen name="Notifications" component={Notifications} />
-  
 </HomeStack.Navigator>
+);
+const DashboardStackScreen=()=>(
+  <HomeStack.Navigator>
+      <HomeStack.Screen name="Dashboard" component={Dashboard}  options={{headerShown: false}} />
+  <HomeStack.Screen name="Profile" component={Profile}  />
+  <HomeStack.Screen name="Payments" component={Payments} />
+  <HomeStack.Screen name="AllEstimates" component={AllEstimates}  />
+  <HomeStack.Screen name="Notifications" component={Notifications} />
+  <HomeStack.Screen name="SideProfile" component={SideProfile}  />
+  <HomeStack.Screen name="Projects" component={Projects}  />
+  <HomeStack.Screen name="Activity" component={Activity}  />
+  </HomeStack.Navigator>
 )
 
 function HomeScreen1() {
@@ -82,8 +100,8 @@ export default function BottomNavbar() {
    
     <NavigationContainer>
       <Tab.Navigator
-       initialRouteName="HomeStackScreen">
-        <Tab.Screen name="HomeStackScreen" component={HomeStackScreen}  options={{ headerShown: false,
+       initialRouteName="UserProfileEditor">
+        <Tab.Screen name="UserProfileEditor" component={UserProfileEditor}  options={{ headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home"  color={color} size={size} />
@@ -113,10 +131,10 @@ export default function BottomNavbar() {
             <MaterialIcons name="design-services" color={color} size={size} />
           ),
         }}/>
-        <Tab.Screen name="Profile" component={Profile}  options={{headerShown: false,
-          tabBarLabel: 'Profile',
+        <Tab.Screen name="DashboardStackScreen" component={DashboardStackScreen}  options={{headerShown: false,
+          tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color, size }) => (
-            <Octicons name="people" color={color} size={size} />
+            <MaterialCommunityIcons name="view-dashboard" color={color} size={size} />
           ),
         }} />
           {/* <Tab.Screen name="ProductDetailView" component={ProductDetailView}  options={{tabBarVisible: false,headerShown: false,

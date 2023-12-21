@@ -16,7 +16,7 @@ const ExploreFeed=(props)=>{
       <View>
       {splitedUrl=="mp4"?  <Video
            ref={video}
-           source={{uri:`http://192.168.1.26:9000/${thumbnail}`}} 
+           source={{uri:`http://192.168.1.44:9000/${thumbnail}`}} 
            useNativeControls
            resizeMode="cover" // Set video resizeMode
            isLooping
@@ -24,7 +24,7 @@ const ExploreFeed=(props)=>{
            style={styles.cardImage}
              controls={true} 
          />:
-       <Image source={{uri:`http://192.168.1.26:9000/${thumbnail}`}} style={styles.cardImage} />}
+       <Image source={{uri:`http://192.168.1.44:9000/${thumbnail}`}} style={styles.cardImage} />}
        {/* <Text style={styles.projectName}>hjghjgh</Text> */}
       </View>
       </TouchableOpacity>
@@ -32,13 +32,13 @@ const ExploreFeed=(props)=>{
         //      {splitedUrl=="mp4"? 
         //   <Video
         //    ref={video}
-        //    source={{uri:`http://192.168.1.26:9000/${thumbnail}`}} 
+        //    source={{uri:`http://192.168.1.44:9000/${thumbnail}`}} 
         //    useNativeControls
         //    resizeMode='contain'
         //    isLooping
         //    onPlaybackStatusUpdate={status => setStatus(() => status)}
         //    style={{height:170,width:150,borderRadius:3}}
-        //  />:     <Image  source={{uri:`http://192.168.1.26:9000/${thumbnail}`}}  style={{height:170,width:150,borderRadius:3,margin:6}} resizeMode='contain' />}
+        //  />:     <Image  source={{uri:`http://192.168.1.44:9000/${thumbnail}`}}  style={{height:170,width:150,borderRadius:3,margin:6}} resizeMode='contain' />}
          
         // </View>
     )

@@ -19,7 +19,7 @@ const UpcomingProjectList=(props)=>{
     return(
         <TouchableOpacity style={deviceSize>786?styles.largeDeviceUpcomingCard :styles.upcomingCard} onPress={onProjectClick}>
            <View>
-            <Image source={{uri:'http://192.168.1.26:9000/feedUploads/1691747681617_Royal-Suite-.jpg'}} style={styles.cardImage} />
+            <Image source={{uri:'http://192.168.1.44:9000/feedUploads/1691747681617_Royal-Suite-.jpg'}} style={styles.cardImage} />
             <Text style={styles.projectName}>{title}</Text>
            </View>
            </TouchableOpacity>

@@ -17,7 +17,7 @@ const StoreProducts=()=>{
     useEffect(()=>{
       const storeItems=async()=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken')
-        const storeApi='http://192.168.1.26:9000/exploreStoreProducts'
+        const storeApi='http://192.168.1.44:9000/exploreStoreProducts'
         const options={
           headers:{
             'Content-Type':'Application/json',

@@ -82,7 +82,7 @@ const Signup = () => {
         });
     
         try {
-          const response = await axios.post('http://192.168.1.26:9000/designer/signup/', formDataToSend, {
+          const response = await axios.post('http://192.168.1.44:9000/designer/signup/', formDataToSend, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -125,7 +125,7 @@ const Signup = () => {
 
 
     //   try {
-    //     const response = await axios.post('http://192.168.1.26:9000/designer/signup/', formData, {
+    //     const response = await axios.post('http://192.168.1.44:9000/designer/signup/', formData, {
     //       headers: {
     //         'Content-Type': 'multipart/form-data',
     //       },

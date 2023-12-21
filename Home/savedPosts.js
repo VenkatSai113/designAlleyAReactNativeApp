@@ -13,20 +13,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import FeedContainer from './FeedContainer'
 import { useRoute } from '@react-navigation/native';
 
-const Home=()=>{
+const SavedPostHome=()=>{
     const route = useRoute();
   const [feedDetails,setFeedDetails]=useState([])
   const [loginUser,setLoginUser]=useState('')
   useEffect(()=>{
-    // const savedPosts=route.name
-    // const selectedPostId1=route.params.savedPostId
-//  console.log(savedPosts)
+    const savedPosts=route.name
+    const selectedPostId1=route.params.savedPostId
+ console.log(savedPosts)
     if(route.name=="savedpostHome"){
         console.log("Hekakafmas")
        const savedPosttsFun=async()=>{
-            // const postInfo1={selectedPostId1,hello:"hello"}
+            const postInfo1={selectedPostId1,hello:"hello"}
         const jwtToken=await AsyncStorage.getItem('jwtToken')
-        const apiUrl='http://192.168.1.44:9000/designerSelectedPost'
+        const apiUrl='http://192.168.1.44:9000/savedPosts'
         const option={
             method:'POST',
             headers:{
@@ -110,6 +110,9 @@ const Home=()=>{
               {feedDetails.map(eachItem=>
                   <FeedContainer stateFeed={eachItem} key={eachItem.postId} loginUser={loginUser} />
               )}
+              {/* <View>
+                <Text>SDFSDSDFSDFS</Text>
+              </View> */}
          
             </ScrollView>
             {/* {screenWidth<786?<BottomNavbar/>:null} */}
@@ -130,7 +133,7 @@ const Home=()=>{
         </SafeAreaView>
     )
 }
-export default Home
+export default SavedPostHome
 const styles=StyleSheet.create({
     container: {
         flex: 1,

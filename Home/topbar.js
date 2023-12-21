@@ -4,6 +4,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useNavigation } from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather'
 
 const Topbar=()=>{
     const navigation = useNavigation()
@@ -13,10 +14,14 @@ const Topbar=()=>{
 
 
     }
+    const nevigateDashboard=()=>{
+        navigation.push('SideProfile', { screen: 'SideProfile' });
+    }
     return(
         <View style={styles.homeUpperView}>
               <StatusBar backgroundColor="#fff" />
         <View style={{flex:1,flexDirection:"row",width:'100%',height:'auto',justifyContent:"space-between",marginTop:2,alignItems:"center"}}>
+       <Feather name="menu" style={{fontSize:30,fontWeight:'bold',marginLeft:20}} onPress={nevigateDashboard}/>
        <Image source={require('../assets/logo.jpeg')} style={styles.logoImage}/>
        <View>
        <View style={styles.topIconView}>

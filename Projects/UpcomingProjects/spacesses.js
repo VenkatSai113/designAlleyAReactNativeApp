@@ -30,7 +30,7 @@ const UpcomingSpacesses=()=>{
         console.log(projectId)
         setProjectId(projectId)
         const spaceDetails={projectId,hello:"hello"}
-        const apiUrl="http://192.168.1.26:9000/spaceCards";
+        const apiUrl="http://192.168.1.44:9000/spaceCards";
         const options={
           method:'POST',
           headers:{
@@ -100,7 +100,7 @@ const UpcomingSpacesses=()=>{
             console.log(pair[0]+ ', ' + pair[1]); 
           }
       
-          const response = await axios.post('http://192.168.1.26:9000/createSpaces', formData, {
+          const response = await axios.post('http://192.168.1.44:9000/createSpaces', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -115,6 +115,39 @@ const UpcomingSpacesses=()=>{
           Alert.alert('Error', 'Failed to upload image. Please try again.');
         }
       };
+      const handleSaveProfile = async () => {
+        try {
+            console.log(selectedImageId)
+            var formData = new FormData();
+          formData.append('spacename', spacename);
+          formData.append('projectId', projectId);
+            if (selectedImageId) {
+                let imageData = {
+                    uri:
+                        Platform.OS === 'android'
+                            ? selectedImageId.uri
+                            : selectedImageId.uri.replace('file://', ''),
+                    type: selectedImageId.type,
+                    name: selectedImageId.fileName,
+                };
+                formData.append('image', imageData);
+            } else {
+                // Use the existing avatarSource if the user didn't change the image
+                formData.append('image', avatarSource);
+            }
+
+            const response = await UpdateUserProfileApiCall(formData);
+
+            console.log("response UpdateUserProfileApiCall", response)
+            if (response.success) {
+                navigation.navigate('MainHome');
+            } else {
+                Alert.alert('Error', 'Failed to save profile changes');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
       
       
     return(

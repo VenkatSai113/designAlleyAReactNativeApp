@@ -10,7 +10,7 @@ const UpcomingProjects=()=>{
         const upcomingProjects=async()=>{
             const jwtToken = await AsyncStorage.getItem('jwtToken');
             console.log(jwtToken,"jwtToken jwtToken")
-            const apiUrl='http://192.168.1.26:9000/upcomingProjects'
+            const apiUrl='http://192.168.1.44:9000/upcomingProjects'
             const options={
                 method:"GET",
                 headers:{

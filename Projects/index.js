@@ -18,7 +18,7 @@ const Projects=({ navigation })=>{
       const createProject=async()=>{
         const projectData={projectName,hello:"hello"}
         const jwtToken=await AsyncStorage.getItem('jwtToken')
-       const apiUrl='http://192.168.1.26:9000/createProject'
+       const apiUrl='http://192.168.1.44:9000/createProject'
        const options={
         method:'POST',
         headers:{

@@ -20,7 +20,7 @@ const Explore=({ navigation })=>{
     useEffect(()=>{
         const getJwtToken=async()=>{
         const jwtToken = await AsyncStorage.getItem('jwtToken');
-        const feedUrl="http://192.168.1.26:9000/feedData"
+        const feedUrl="http://192.168.1.44:9000/feedData"
         const options={
             method:"GET",
             headers:{
@@ -97,7 +97,7 @@ const Explore=({ navigation })=>{
         
         try {
           const jwtToken = await AsyncStorage.getItem('jwtToken');
-          const feedUrl = iconName === 'All' ? 'http://192.168.1.26:9000/feedData' : `http://192.168.1.26:9000/filterdData/?type=${iconName}`;
+          const feedUrl = iconName === 'All' ? 'http://192.168.1.44:9000/feedData' : `http://192.168.1.44:9000/filterdData/?type=${iconName}`;
           const options = {
             method: 'GET',
             headers: {

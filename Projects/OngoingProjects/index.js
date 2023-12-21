@@ -9,7 +9,7 @@ const OngoingProjects=()=>{
     useEffect(()=>{
         const upcomingProjects=async()=>{
             const jwtToken = await AsyncStorage.getItem('jwtToken');
-            const apiUrl='http://192.168.1.26:9000/ongoingProjects'
+            const apiUrl='http://192.168.1.44:9000/ongoingProjects'
             const options={
                 method:"GET",
                 headers:{

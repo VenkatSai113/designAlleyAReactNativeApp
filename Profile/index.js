@@ -13,6 +13,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import Entypo from 'react-native-vector-icons/Entypo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfilePosts from './profilePosts'
+import Topbar from '../Home/topbar';
 
 const Profile=({ navigation })=>{
     const [isModalVisible, setModalVisible] = useState(false);
@@ -22,7 +23,7 @@ const Profile=({ navigation })=>{
     useEffect(()=>{
         const profileInfo=async()=>{
             const jwtToken=await AsyncStorage.getItem('jwtToken')
-            const apiUrl='http://192.168.1.26:9000/profileData';
+            const apiUrl='http://192.168.1.44:9000/profileData';
             const options={
                 method:'GET',
                 headers:{
@@ -38,7 +39,7 @@ const Profile=({ navigation })=>{
           
           const poistJwtToken=await AsyncStorage.getItem('jwtToken')
           
-          const postApiUrl="http://192.168.1.26:9000/profileAllposts"
+          const postApiUrl="http://192.168.1.44:9000/profileAllposts"
         const postOptions={
             headers:{
                 "Content-Type":"Application/json",
@@ -103,12 +104,14 @@ const Profile=({ navigation })=>{
       }
     return(
         <SafeAreaView style={styles.homeContainer}>
+           
             {/* <Sidebar/> */}
          <View style={styles.mainColumnView}> 
          {/* {screenWidth<786?  <Topbar/>:null} */}
+         <Topbar/>
          <View style={styles.profileView}>
            <View style={styles.profileImageView}>
-            <Image style={styles.profileImage1} source={{uri:`http://192.168.1.26:9000/${profileData.logo}`}}/>
+            <Image style={styles.profileImage1} source={{uri:`http://192.168.1.44:9000/${profileData.logo}`}}/>
            <Text style={styles.designerNameStyle}>{profileData.desigener_name}</Text>
            </View>
            <View style={styles.profileContainer}>

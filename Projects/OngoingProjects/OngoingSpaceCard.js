@@ -15,7 +15,7 @@ const OngoingSpaceCard=(props)=>{
     return(
         <TouchableOpacity style={deviceSize>786?styles.largeDeviceUpcomingCard :styles.upcomingCard} onPress={handleChildClick}>
            <View>
-            <Image source={{uri:`http://192.168.1.26:9000/${spaceImage}`}} style={styles.cardImage} />
+            <Image source={{uri:`http://192.168.1.44:9000/${spaceImage}`}} style={styles.cardImage} />
             <Text style={styles.projectName}>{spaceName}</Text>
           
            </View>

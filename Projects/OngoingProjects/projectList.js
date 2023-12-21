@@ -20,7 +20,7 @@ const OngoingProjectList=(props)=>{
       }
     return(
            <TouchableOpacity style={deviceSize>786?styles.largeDeviceUpcomingCard :styles.upcomingCard} onPress={ongoingProjectClick}>
-            <Image source={{uri:'http://192.168.1.26:9000/feedUploads/1691747681617_Royal-Suite-.jpg'}} style={styles.cardImage} />
+            <Image source={{uri:'http://192.168.1.44:9000/feedUploads/1691747681617_Royal-Suite-.jpg'}} style={styles.cardImage} />
             
             <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                 <Text style={styles.projectName}>{title}</Text>

@@ -27,7 +27,7 @@ const Store=({ navigation })=>{
     useEffect(()=>{
       const storeItems=async()=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken')
-        const storeApi='http://192.168.1.26:9000/exploreStoreProducts'
+        const storeApi='http://192.168.1.44:9000/exploreStoreProducts'
         const options={
           headers:{
             'Content-Type':'Application/json',
@@ -45,7 +45,7 @@ const Store=({ navigation })=>{
       storeItems()
       const ongoingProjects=async()=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken')
-        const apiUrl='http://192.168.1.26:9000/projectsInStore';
+        const apiUrl='http://192.168.1.44:9000/projectsInStore';
         const option={
           method:'GET',
           headers:{
@@ -66,9 +66,9 @@ const Store=({ navigation })=>{
       
     ];
     const images = [
-        'http://192.168.1.26:9000/vendorProducts/1692433004877_caffitable.jpg',
-        'http://192.168.1.26:9000/vendorProducts/1692433004877_caffitable.jpg',
-        'http://192.168.1.26:9000/vendorProducts/1692433004877_caffitable.jpg',
+        'http://192.168.1.44:9000/vendorProducts/1692433004877_caffitable.jpg',
+        'http://192.168.1.44:9000/vendorProducts/1692433004877_caffitable.jpg',
+        'http://192.168.1.44:9000/vendorProducts/1692433004877_caffitable.jpg',
         // Add more image URLs as needed
       ];
      
@@ -80,21 +80,21 @@ const Store=({ navigation })=>{
         const splitedImages= thumbnail.split(',')[0]
         return(
         <TouchableOpacity onPress={helllo}>
-        <Image source={{uri:`http://192.168.1.26:9000/${splitedImages}`}} style={styles.exploreThumbnail}  />
+        <Image source={{uri:`http://192.168.1.44:9000/${splitedImages}`}} style={styles.exploreThumbnail}  />
        </TouchableOpacity>)
       };
       const popularBrands = ({ item }) => {
         const {thumbnail}=item
         const splitedImages= thumbnail.split(',')[0]
         return(
-        <Image source={{uri:`http://192.168.1.26:9000/${splitedImages}`}} style={styles.popularBrandsThumbnail} />
+        <Image source={{uri:`http://192.168.1.44:9000/${splitedImages}`}} style={styles.popularBrandsThumbnail} />
         )
       };
       const material = ({ item }) => {
         const {thumbnail}=item
         const splitedImages= thumbnail.split(',')[0]
         return(
-        <Image source={{uri:`http://192.168.1.26:9000/${splitedImages}`}} style={styles.exploreThumbnail} />
+        <Image source={{uri:`http://192.168.1.44:9000/${splitedImages}`}} style={styles.exploreThumbnail} />
       )
         }
     return(
@@ -135,10 +135,10 @@ const Store=({ navigation })=>{
         ))}
       </Swiper> :<Swiper autoPlay interval={1000}>
       <View>
-      <Image source={{ uri: "http://192.168.1.26:9000/vendorProducts/1692433004877_caffitable.jpg" }} style={styles.image} resizeMode='cover' />
+      <Image source={{ uri: "http://192.168.1.44:9000/vendorProducts/1692433004877_caffitable.jpg" }} style={styles.image} resizeMode='cover' />
       </View>
       <View>
-      <Image source={{ uri: "http://192.168.1.26:9000/vendorProducts/1692868214980_Wooden-bookshelf-display-case-Bookcase-cabinet-sideboard_717cbce3-5248-4e67-a549-3962e7c7961d_1200x.jpg" }} style={styles.image} resizeMode='contain' />
+      <Image source={{ uri: "http://192.168.1.44:9000/vendorProducts/1692868214980_Wooden-bookshelf-display-case-Bookcase-cabinet-sideboard_717cbce3-5248-4e67-a549-3962e7c7961d_1200x.jpg" }} style={styles.image} resizeMode='contain' />
       </View>
       <View>
       <Image source={{ uri: "http://godfatherstyle.com/wp-content/uploads/2015/12/Interior-Design-Ideas-.jpg" }} style={styles.image} resizeMode='contain' />

@@ -32,7 +32,7 @@ export default function SampleCreateSpace() {
         type: 'image/jpg',
       });
 
-      const response = await axios.post('http://192.168.1.26:9000/createSpaces', formData, {
+      const response = await axios.post('http://192.168.1.44:9000/createSpaces', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
