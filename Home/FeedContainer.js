@@ -1,5 +1,5 @@
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {View,Text,SafeAreaView,StyleSheet,Dimensions,Image,ScrollView,TouchableOpacity,Button,Platform} from 'react-native'
+import {View,Text,SafeAreaView,StyleSheet,Dimensions,Image,ScrollView,TouchableOpacity,Button,Platform,} from 'react-native'
 import { useFonts, Roboto_400Regular } from '@expo-google-fonts/roboto';
 import React, { useRef ,useState,useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -12,11 +12,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SwipeableViews from 'react-swipeable-views-native';
 import { Video, ResizeMode } from 'expo-av';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { TextInput } from 'react-native-paper';
 
 const FeedContainer=(props)=>{
     const video = React.useRef(null);
     const {stateFeed,loginUser}=props
-
     const {deignerName,postId,caption,likes,logo, designerId,thumbnail,postType,createdAt,tags,designStyle,category,location,occupancy,propertySize,duration,designerLogo,userId,tourId}=stateFeed
     const splitedImages=thumbnail.split(",")
     const [status, setStatus] = React.useState({});
@@ -25,17 +25,38 @@ const FeedContainer=(props)=>{
     const [commentModal,setCommentModal]=useState(false)
     const [savePostStatue,setSavePostStatue]=useState(false);
     const [likePostStatus,setLikePostStatus]=useState(false);
+    const [comments,setComments]=useState([])
+    const [comment,setCommentText]=useState('')
+    const [commentStatus,setCommentStatus]=useState(false)
     useEffect(()=>{
         loginUser.designer_id===userId?setSavePostStatue(true):setSavePostStatue(false)
-        console.log(savePostStatue)
-
     },[])
     
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
-    const toggleCommentModal=()=>{
+    const toggleCommentModal=async()=>{
         setCommentModal(!commentModal)
+        const commentPostId={comment:"comment",postId}
+        const commentPostUrl='http://192.168.1.44:9000/viewComments'
+        const options={
+            method:'POST',
+            headers:{
+                'Content-Type':'Application/json',
+            },
+            body:JSON.stringify(commentPostId)
+        }
+        const response=await fetch(commentPostUrl,options)
+        const data=await response.json()
+      
+        setComments(data)
+        if(data.length===0){
+            setCommentStatus(true)
+            
+        }else{
+            setCommentStatus(false)
+           
+        }
     }
     let [fontsLoaded] = useFonts({
         'Roboto-Regular': Roboto_400Regular,
@@ -48,8 +69,6 @@ const FeedContainer=(props)=>{
     const onPressSave=async()=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken');
         setSavePostStatue(!savePostStatue) 
-        console.log(savePostStatue,"ioyuioyuioyuio")
-       
         const postIds={postId,hello:"hello"}
         const savedApiUrl="http://192.168.1.44:9000/deleteSavedPost";
         const options={
@@ -66,9 +85,7 @@ const FeedContainer=(props)=>{
     }
     const onPressUnSave=async()=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken')
-        setSavePostStatue(!savePostStatue)
-        console.log(savePostStatue,"ioyuioyuioyuio")
-       
+        setSavePostStatue(!savePostStatue)       
         const postIds={postId,hello:"hello"}
         const savedApiUrl="http://192.168.1.44:9000/savedPost";
         const options={
@@ -86,6 +103,86 @@ const FeedContainer=(props)=>{
     const onPressLike=()=>{
         setLikePostStatus(!likePostStatus)
     }
+    const commentPost=async()=>{
+        const jwtToken=await AsyncStorage.getItem('jwtToken')
+        const comments={comment,postId}
+        const commentsUrl='http://192.168.1.44:9000/comments'
+        const options={
+            method:'POST',
+            headers:{
+                'Content-Type':'Application/json',
+                'Authorization':`Bearer ${jwtToken}`
+            },
+            body:JSON.stringify(comments)
+        }
+        const response=await fetch(commentsUrl,options)
+        const data=await response.json()
+        setComments(data)
+        setCommentText('')
+        if(data.length===0){
+            setCommentStatus(true)
+        }else{
+            setCommentStatus(false)
+        }
+    }
+    const onChangeText=(inputText)=>{
+        setCommentText(inputText)
+    }
+    const getTimeElapsed = () => {
+        const postDate = new Date(createdAt);
+        const currentDate = new Date();
+        const timeDiff = currentDate - postDate;
+    
+        // Calculate the time difference in milliseconds, seconds, minutes, hours, days, months, and years
+        const secondsDiff = Math.floor(timeDiff / 1000);
+        const minutesDiff = Math.floor(secondsDiff / 60);
+        const hoursDiff = Math.floor(minutesDiff / 60);
+        const daysDiff = Math.floor(hoursDiff / 24);
+        const monthsDiff = Math.floor(daysDiff / 30);
+        const yearsDiff = Math.floor(monthsDiff / 12);
+    
+        if (yearsDiff >= 1) {
+          return `${yearsDiff} ${yearsDiff === 1 ? 'year' : 'years'} ago`;
+        } else if (monthsDiff >= 1) {
+          return `${monthsDiff} ${monthsDiff === 1 ? 'month' : 'months'} ago`;
+        } else if (daysDiff >= 1) {
+          return `${daysDiff} ${daysDiff === 1 ? 'day' : 'days'} ago`;
+        } else if (hoursDiff >= 1) {
+          return `${hoursDiff} ${hoursDiff === 1 ? 'hour' : 'hours'} ago`;
+        } else if (minutesDiff >= 1) {
+          return `${minutesDiff} ${minutesDiff === 1 ? 'minute' : 'minutes'} ago`;
+        } else {
+          return 'Less than a minute ago';
+        }
+      };
+      const commentTimeElapsed = (commentsCreatedAt) => {
+        const postDate = new Date(commentsCreatedAt);
+        const currentDate = new Date();
+        const timeDiff = currentDate - postDate;
+    
+        
+        // Calculate the time difference in milliseconds, seconds, minutes, hours, days, months, and years
+        const secondsDiff = Math.floor(timeDiff / 1000);
+        const minutesDiff = Math.floor(secondsDiff / 60);
+        const hoursDiff = Math.floor(minutesDiff / 60);
+        const daysDiff = Math.floor(hoursDiff / 24);
+        const monthsDiff = Math.floor(daysDiff / 30);
+        const yearsDiff = Math.floor(monthsDiff / 12);
+    
+        if (yearsDiff >= 1) {
+          return `${yearsDiff} ${yearsDiff === 1 ? 'year' : 'years'} ago`;
+        } else if (monthsDiff >= 1) {
+          return `${monthsDiff} ${monthsDiff === 1 ? 'month' : 'months'} ago`;
+        } else if (daysDiff >= 1) {
+          return `${daysDiff} ${daysDiff === 1 ? 'day' : 'days'} ago`;
+        } else if (hoursDiff >= 1) {
+          return `${hoursDiff} ${hoursDiff === 1 ? 'hour' : 'hours'} ago`;
+        } else if (minutesDiff >= 1) {
+          return `${minutesDiff} ${minutesDiff === 1 ? 'minute' : 'minutes'} ago`;
+        } else {
+          return 'Less than a minute ago';
+        }
+      };
 
     return(
         <View >
@@ -139,7 +236,6 @@ const FeedContainer=(props)=>{
          />
            )}</SwipeableViews></>:  <Video
            ref={video}
-           
            source={{uri:`http://192.168.1.44:9000/${eachImage[0]}`}} 
            useNativeControls
            resizeMode='contain'
@@ -154,7 +250,7 @@ const FeedContainer=(props)=>{
             <Image    source={{uri:`http://192.168.1.44:9000/${logo}`}}  style={screenWidth>786?styles.profileImage:styles.smallScreenProfileImage}/>
             <View style={styles.profileNameTime}>
             <Text style={styles.designerName}>{deignerName}</Text>
-            <Text style={styles.timeText}>1 day ago</Text>
+            <Text style={styles.timeText}>{getTimeElapsed()}</Text>
             
             </View>
             </View>
@@ -228,32 +324,44 @@ const FeedContainer=(props)=>{
         animationOut="slideOutDown"
         style={styles.modal}>
         <View style={styles.modalContent}>
-            <View style={styles.popupModelView}>
+            <ScrollView style={styles.popupModelView}>
             <TouchableOpacity onPress={toggleCommentModal}>
             <AntDesign name="closecircle" style={styles.closeIcon}/>
           </TouchableOpacity>
-                {/* <View style={styles.popupModalRowView}>
-                    <AntDesign name="edit" style={styles.editIcon}/>
-                <Text style={styles.editPostText}>Edit Post</Text>
-                </View>
-                <View style={styles.popupModalRowView}>
-                    <AntDesign name="delete" style={styles.editIcon}/>
-                <Text style={styles.editPostText}>Delete Post</Text>
-                </View><View style={styles.popupModalRowView}>
-                    <AntDesign name="sharealt" style={styles.editIcon}/>
-                <Text style={styles.editPostText}>Share Post</Text>
-                </View><View style={styles.popupModalRowView}>
-                    <AntDesign name="clockcircleo" style={styles.editIcon}/>
-                <Text style={styles.editPostText}>Archive</Text>
-                </View>
-                <View style={styles.popupModalRowView}>
-                    <AntDesign name="hearto" style={styles.editIcon}/>
-                <Text style={styles.editPostText}>Add to collection</Text>
-                </View>
-                <View style={styles.popupModalRowView}>
-                    <Feather name="send" style={styles.editIcon}/>
-                <Text style={styles.editPostText}>Send</Text>
-                </View> */}
+          {commentStatus?<View style={styles.emtyCommentView}>
+            <Text style={{fontSize:17,fontWeight:'bold'}}>No Comments yet.</Text>
+            <Text style={{fontSize:15,fontWeight:'normal',marginTop:20}}>Start the conversation.</Text>
+            {/* {comments.map(eachItem=>
+                  <View style={styles.commentItemView}>
+                  <Image source={{uri:`http://192.168.1.44:9000/${eachItem.image}`}} style={styles.commentProfile}/>
+                  <View style={{marginLeft:15}}>
+                      <Text style={styles.commentUserName}>{eachItem.desigener_name}</Text>
+                  <Text>{eachItem.comment}</Text>
+                  </View>
+                  </View>)} */}
+          
+          </View> :
+         
+           
+            <View style={styles.commentsView}>
+            {comments.map(eachItem=>
+                  <View style={styles.commentItemView}>
+                  <Image source={{uri:`http://192.168.1.44:9000/${eachItem.image}`}} style={styles.commentProfile}/>
+                  <View style={{marginLeft:15}}>
+                      <Text style={styles.commentUserName}>{eachItem.desigener_name}</Text>
+                  <Text>{eachItem.comment}</Text>
+                  <Text style={{fontSize:10}}>{commentTimeElapsed(eachItem.commentsCreatedAt)}</Text>
+                  </View>
+                  </View>)}
+          
+          </View>}
+              
+            </ScrollView>
+            <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginTop:10}}>
+                <TextInput style={{width:'85%',height:40}} placeholder='Add a comment...' onChangeText={onChangeText} value={comment}></TextInput>
+                <TouchableOpacity  onPress={commentPost}>
+                    <Text style={styles.postText} >Post</Text>
+                </TouchableOpacity>
             </View>
          
         </View>
@@ -264,6 +372,10 @@ const FeedContainer=(props)=>{
 }
 export default FeedContainer
 const styles=StyleSheet.create({
+    postText:{
+        fontSize:17,
+        fontWeight:'bold'
+    },
     slideContainer:{
         height:350,
         width:'100%'
@@ -282,6 +394,7 @@ const styles=StyleSheet.create({
         padding: 20,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        height:hp('50%')
       },
     homeContainer:{
         display:'flex',
@@ -411,7 +524,6 @@ const styles=StyleSheet.create({
         backgroundColor:'#fff'
     },
     popup:{
-       
         height:200,
         width:100
     },
@@ -435,11 +547,37 @@ const styles=StyleSheet.create({
         fontSize:16,
         marginLeft:20,
         marginBottom:20,
-      
     },
     closeIcon:{
         fontSize:25,
         color:'#ca9881',
         marginLeft:'auto'
+    },
+    commentsView:{
+        display:'flex',
+        flexDirection:'column',
+    },
+    emtyCommentView:{
+        display:'flex',
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    commentItemView:{
+        display:'flex',
+        flexDirection:'row',
+        alignItems:'center',
+        marginTop:15,
+        // borderBottomColor:'gray',
+        // borderBottomWidth:1
+    },
+    commentProfile:{
+        height:50,
+        width:50,
+        borderRadius:25
+    },
+    commentUserName:{
+        fontSize:14,
+        fontWeight:'bold'
     }
 })

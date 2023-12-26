@@ -8,8 +8,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useEffect } from 'react';
 import axios from 'axios';
 import UpcomingSpaceCard from './spaceCards'
-
-
+import Constants from 'expo-constants';
+const apiBaseUrl = 'http://192.168.1.44:9000'; // Replace with your machine's local IP and port
 const UpcomingSpacesses=()=>{
  
     const [isModalVisible, setModalVisible] = useState(false);
@@ -86,69 +86,64 @@ const UpcomingSpacesses=()=>{
           console.error('Error picking an image', err);
         }
       };
-      const uploadImage = async () => {
-
+      const UpdateUserProfileApiCall = async (formData) => {
         try {
-          console.log(spaceImage,"ghdrtrktjeiprkteprjytinbmdfnpoier ijgerijt")
-          const formData = new FormData();
-          formData.append('spaceImage', JSON.stringify(spaceImage));
-          formData.append('spacename', spacename);
-          formData.append('projectId', projectId);
-      
-          // Log the formData to check its content
-          for (let pair of formData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]); 
-          }
-      
-          const response = await axios.post('http://192.168.1.44:9000/createSpaces', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+          const response = await fetch(`${apiBaseUrl}/createSpaces`, {
+            method: 'POST',
+            body: formData,
+            // Add any necessary headers (e.g., authorization headers)
           });
       
-          console.log('Upload successful:', response.data);
-          // Handle success, e.g., show a success message
-          Alert.alert('Success', 'Image uploaded successfully');
+          const data = await response.json();
+          if(response.ok===true){
+            setModalVisible(!isModalVisible);
+            setSpaceDetails(data)
+            Alert.alert('Space Successfully Created...')
+          }
+         
+
         } catch (error) {
-          console.error('Error uploading file:', error);
-          // Handle error, e.g., show an error message
-          Alert.alert('Error', 'Failed to upload image. Please try again.');
+          console.error('UpdateUserProfileApiCall Error:', error);
+          throw error;
         }
       };
-      const handleSaveProfile = async () => {
+
+      const uploadImage = async () => {
         try {
-            console.log(selectedImageId)
-            var formData = new FormData();
+          if (!spacename || !projectId ) {
+            Alert.alert('Error', 'Please fill in all required fields.');
+            return;
+          }
+    
+          var formData = new FormData();
           formData.append('spacename', spacename);
           formData.append('projectId', projectId);
-            if (selectedImageId) {
-                let imageData = {
-                    uri:
-                        Platform.OS === 'android'
-                            ? selectedImageId.uri
-                            : selectedImageId.uri.replace('file://', ''),
-                    type: selectedImageId.type,
-                    name: selectedImageId.fileName,
-                };
-                formData.append('image', imageData);
-            } else {
-                // Use the existing avatarSource if the user didn't change the image
-                formData.append('image', avatarSource);
-            }
-
-            const response = await UpdateUserProfileApiCall(formData);
-
-            console.log("response UpdateUserProfileApiCall", response)
-            if (response.success) {
-                navigation.navigate('MainHome');
-            } else {
-                Alert.alert('Error', 'Failed to save profile changes');
-            }
+          
+    
+          if (spaceImage) {
+            let imageData = {
+              uri: spaceImage.uri,
+              type: 'image/jpeg', // You may need to adjust the type based on the selected image format
+              name: 'profile.jpg', // You can customize the filename
+            };
+            formData.append('spaceImage', imageData);
+          }
+    
+          const response = await UpdateUserProfileApiCall(formData);
+    
+          console.log('response UpdateUserProfileApiCall', response);
+    
+          if (response.success) {
+            Alert.alert('Success', 'Profile updated successfully.');
+          } else {
+            Alert.alert('Error', 'Failed to save profile changes');
+          }
         } catch (error) {
-            console.error(error);
+          console.error(error);
         }
-    };
-      
+      };
+
+
       
     return(
         <SafeAreaView>

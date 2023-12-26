@@ -27,14 +27,15 @@ const styles=StyleSheet.create({
     upcomingCard:{
         width:"90%",
         marginTop:10,
-        borderRadius:3
+        borderRadius:3,
+        backgroundColor:'#cfc3ad'
     },
     largeDeviceUpcomingCard:{
         width:"30%",
         marginTop:10,
         borderRadius:3,
         borderWidth:1,
-        borderColor:'#cfc3ad'
+        backgroundColor:'#cfc3ad'
     },
     cardImage:{
         width:'100%',

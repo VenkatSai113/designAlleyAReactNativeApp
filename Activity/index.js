@@ -4,17 +4,22 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/native';
 
 const Activity=()=>{
     const deviceSize= Dimensions.get('window').width
+    const navigation = useNavigation();
 
+    const handleLikedPosts=()=>{
+        navigation.push('LikedPosts', { screen: 'LikedPosts' });
+    }
     return(
         <SafeAreaView style={styles.bgContainer}>
             <StatusBar backgroundColor='#fff' />
             <Text style={styles.activityText}>One place to manage your Activity</Text>
             <Text style={styles.interactionText}>Interaction</Text>
             <View style={{width:wp('97%'),display:'flex',flexDirection:'row',flexWrap:'wrap',justifyContent:'space-around'}}>
-            <TouchableOpacity style={deviceSize>786?styles.largeDeviceUpcomingCard :styles.upcomingCard}  >
+            <TouchableOpacity style={deviceSize>786?styles.largeDeviceUpcomingCard :styles.upcomingCard} onPress={handleLikedPosts}  >
                 <AntDesign name="hearto" style={styles.activateIcon}/>
                 <Text>Likes</Text>
                 <AntDesign name="right" style={styles.activateIcon}/>

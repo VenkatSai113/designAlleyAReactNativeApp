@@ -1,4 +1,4 @@
-import {View,Text,SafeAreaView,StatusBar,Image,StyleSheet,Platform,Dimensions,TouchableOpacity,TextInput,ScrollView} from 'react-native'
+import {View,Text,SafeAreaView,StatusBar,Image,StyleSheet,Platform,Dimensions,TouchableOpacity,TextInput,ScrollView,CheckBox as RNCheckBox,} from 'react-native'
 import {Row,Col} from 'react-native-responsive-grid-system'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Feather from 'react-native-vector-icons/Feather'
@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views-native';
+import Modal from 'react-native-modal';
 
 const getDeviceSize = () => {
     const screenWidth = Dimensions.get('window').width; 
@@ -20,6 +21,13 @@ const ProductDetailView=()=>{
     const deviceSize = getDeviceSize();
     const [singleProduct,setSingleProduct]=useState('')
     const [productImages,setProductImages]=useState([])
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [availableSpaces,setAvailableSpaces]=useState([])
+    const [checked, setChecked] = useState(false);
+
+  const toggleCheckBox = () => {
+    setChecked(!checked);
+  }
     useEffect(()=>{
         const singleProductView=async()=>{
             const parseProductId=await AsyncStorage.getItem("singleProductId")
@@ -45,7 +53,30 @@ const ProductDetailView=()=>{
            
         }
         singleProductView()
+        const projectSpaces=async()=>{
+            const projectId= await AsyncStorage.getItem('selectedProjectId')
+            const jwtToken=await AsyncStorage.getItem('jwtToken')
+            const spaceDetails={projectId,hello:"hello"}
+            const apiUrl='http://192.168.1.44:9000/spaceCards'
+            const options={
+                method:'POST',
+                headers:{
+                    'Content-Type':'Application/json',
+                    'Authorization':`Beare ${jwtToken}`
+                },
+                body:JSON.stringify(spaceDetails)
+            }
+            const response=await fetch(apiUrl,options)
+            const data=await response.json()
+            console.log(data,"spaces........")
+            setAvailableSpaces(data)
+        }
+        projectSpaces()
     },[])
+    const toggleModal=()=>{
+        console.log("Hello")
+        setModalVisible(!isModalVisible);
+    }
       
     return(
         <SafeAreaView>
@@ -95,14 +126,11 @@ const ProductDetailView=()=>{
                     <Text style={styles.descriptionText}>Spacifications : </Text>
                     <Text style={styles.descriptionText}>Brand : <Text style={styles.description}>{singleProduct.brandName}</Text> </Text>
                     <Text style={styles.descriptionText}>Colour : <Text style={styles.description}>{singleProduct.color}</Text> </Text>
-                    <Text style={styles.descriptionText}>MaterialType : <Text style={styles.description}>{singleProduct.name}</Text> </Text>
+                    <Text style={styles.descriptionText}>Material Type : <Text style={styles.description}>{singleProduct.name}</Text> </Text>
                     <Text style={styles.descriptionText}>Usage : <Text style={styles.description}>{singleProduct.usages}</Text> </Text>
                     <Text style={styles.descriptionText}>Estimate Delivery : <Text style={styles.description}>{singleProduct.estimateDelivery}</Text> </Text>
-
                     <Text style={styles.descriptionText}>Product Size : <Text style={styles.description}>{singleProduct.productSize}</Text> </Text>
-
                     <Text style={styles.descriptionText}>Quantity : <Text style={styles.description}>{singleProduct.quantity}</Text> </Text>  
-                   
                     <Text style={styles.descriptionText}>Shipping Charges : <Text style={styles.description}>{singleProduct.shippingCharges}</Text> </Text>
                     <Text style={styles.descriptionText}>Tax : <Text style={styles.description}>{singleProduct.tax}</Text> </Text>
                   </View>
@@ -110,24 +138,13 @@ const ProductDetailView=()=>{
                     <TouchableOpacity style={styles.touchableButton}>
                     <Text style={styles.favoriteText}><AntDesign name="hearto" style={{fontSize:15}} />  Add to Favorite</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.touchableButton}>
+                    <TouchableOpacity style={styles.touchableButton} onPress={toggleModal}>
                     <Text style={styles.favoriteText}><Ionicons name="add-circle-outline" style={{fontSize:15}} />  Add to Project</Text>
                     </TouchableOpacity>
-                   
-                   
                   </View>
                     </View>
          </View>
          </View>
-  
-      
-
-
-
-
-
-
-                
               {/* <Row>
                 <Col md={6}>
                <Image source={{uri:"http://192.168.1.44:9000/feedUploads/1691661773771_31 - Copy.jpg"}} resizeMode='contain' style={[styles.productImage,Platform.OS==='web' && styles.webProductImage]} />
@@ -146,6 +163,38 @@ const ProductDetailView=()=>{
                 </Col>
               </Row> */}
             </ScrollView>
+            <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={toggleModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        style={styles.modal}>
+        <View style={styles.modalContent}>
+            <View style={styles.popupModelView}>
+            <TouchableOpacity onPress={toggleModal}>
+            <AntDesign name="closecircle" style={styles.closeIcon}/>
+          </TouchableOpacity>
+          <Text style={{textAlign:'center',fontSize:14,fontWeight:'bold'}}>Select Spaces</Text>
+               <View style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100%'}}>
+                {/* {storeProjects.map(eachProject=>
+                <StoreProjects projectDetails={eachProject} key={eachProject.projectId} handleSelectedProject={handleSelectedProject}/>
+                  )} */}
+                  {availableSpaces.map(eachProject=>
+                   <View>
+                   <RNCheckBox
+                     value={checked}
+                     onValueChange={toggleCheckBox}
+                   />
+                   <Text>Check me</Text>
+                 </View>)}
+                  
+               
+               </View>
+            </View>
+         
+        </View>
+      </Modal>
+
         </SafeAreaView>
     )
 }
@@ -218,5 +267,42 @@ const styles=StyleSheet.create({
     saveIcon:{
         // textAlign:'left'
         
-    }
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      modal: {
+        margin: 0,
+        justifyContent: 'flex-end',
+      },
+      modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
+    homeContainer:{
+        display:'flex',
+        flexDirection:'row',
+    },logoImage:{
+        width:150,
+        height:60,
+        resizeMode:"contain",
+    },closeIcon:{
+      fontSize:25,
+      color:'#ca9881',
+      marginLeft:'auto'
+  },
+  rightView:{
+    height:12,
+    width:200,
+    
+  },
+  popupModelView:{
+    display:'flex',
+    flexDirection:'column',
+    
+},
 })

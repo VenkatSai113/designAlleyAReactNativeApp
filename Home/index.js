@@ -39,8 +39,6 @@ const Home=()=>{
         const data =await response.json()
         console.log(data,'fghfghfghfghfghf')
         setFeedDetails(data)
-        
-    
     }
     savedPosttsFun()
     }else{
@@ -57,7 +55,6 @@ const Home=()=>{
             "authorization":`Bearer ${jwtToken}`,
             'role':1
         }
-       
     }
     const response=await fetch(feedUrl,options);
     const data=await response.json();
@@ -74,7 +71,6 @@ const Home=()=>{
             "Content-Type":"Application/json",
             "Authorization":`Bearer ${jwtToken}`
         }
-       
     }
     const response=await fetch(logUrl,options);
     const data1=await response.json();
@@ -82,8 +78,6 @@ const Home=()=>{
         setLoginUser(data1)
         console.log(data1,'data111')
     }
-   
- 
     }
     logedInUser()
 },[])
@@ -95,7 +89,6 @@ const Home=()=>{
     let [fontsLoaded] = useFonts({
         'Roboto-Regular': Roboto_400Regular,
       });
-    
       if (!fontsLoaded) {
         return null; // Return a loading indicator or placeholder
       }
@@ -105,12 +98,10 @@ const Home=()=>{
             {/* <Sidebar/> */}
          <View style={styles.mainColumnView}>
          {screenWidth<786?  <Topbar/>:<Topbar/>}
-         
             <ScrollView >
               {feedDetails.map(eachItem=>
                   <FeedContainer stateFeed={eachItem} key={eachItem.postId} loginUser={loginUser} />
               )}
-         
             </ScrollView>
             {/* {screenWidth<786?<BottomNavbar/>:null} */}
           </View>
@@ -121,6 +112,8 @@ const Home=()=>{
         animationOut="slideOutDown"
         style={styles.modal}>
         <View style={styles.modalContent}>
+          <Text>This is your bottom-up and growing modal content. </Text>
+          
           <Text>This is your bottom-up and growing modal content. </Text>
           <TouchableOpacity onPress={toggleModal}>
             <Text>Close</Text>

@@ -50,7 +50,8 @@ export default UpcomingProjects
 const styles=StyleSheet.create({
     upcomingProjectsView:{
         width:wp('100%'),
-        height:hp('90%'),
+        height:hp('85%'),
+        
        
     },
     upcomingProjectText:{

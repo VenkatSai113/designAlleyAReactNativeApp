@@ -3,6 +3,7 @@ import {View,Text,ScrollView,SafeAreaView,StatusBar,StyleSheet,Image,Dimensions}
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OngoingProjectList from './projectList'
+
 const OngoingProjects=()=>{
     const deviceSize= Dimensions.get('window').width
     const [upcomingProjects,setUpcomingProjects]=useState([])

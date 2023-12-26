@@ -2,21 +2,24 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import Swiper from 'react-native-web-swiper';
 import { View,Text,StyleSheet,TextInput,Image,Platform,FlatList,ScrollView,SafeAreaView, TouchableOpacity } from "react-native"
 import Topbar from '../Home/topbar';
-import RNPickerSelect from 'react-native-picker-select';
 import { useState,useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Picker} from '@react-native-picker/picker';
-
-
+import Modal from 'react-native-modal';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import StoreProjects from './projects'
 
 
 const Store=({ navigation })=>{
     const [selectedValue, setSelectedValue] = useState('');
     const [productImages,setProductImages]=useState('')
     const [availableProjects,setAvailableProjects]=useState('')
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [storeProjects,setStoreProjects]=useState([])
+    const [selectedProject,setSelectedProject]=useState('')
     const navigateToNewDetails = () => {
       // Replace "DetailsScreen" with "NewDetailsScreen"
       // navigation.replace('Store', { screen: 'StoreProducts' });
+      navigation.replace('store',{screen:'status'});
       console.log("Hello")
     };
     const placeholder = {
@@ -25,6 +28,7 @@ const Store=({ navigation })=>{
       color: '#9EA0A4',
     };
     useEffect(()=>{
+      setModalVisible(!isModalVisible);
       const storeItems=async()=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken')
         const storeApi='http://192.168.1.44:9000/exploreStoreProducts'
@@ -37,7 +41,6 @@ const Store=({ navigation })=>{
         }
         const response=await fetch(storeApi,options)
         const data=await response.json()
-        console.log(data)
         if(response.ok==true){
           setProductImages(data)
         }
@@ -58,7 +61,28 @@ const Store=({ navigation })=>{
         setAvailableProjects(data)
       }
       ongoingProjects()
+      const projects=async()=>{
+        const storeProjectsApi='http://192.168.1.44:9000/projectsInStore'
+        const jwtToken=await AsyncStorage.getItem("jwtToken")
+        const options={
+          method:'GET',
+          headers:{
+          'Content-Type':'Application/json',
+          'Authorization':`Bearer ${jwtToken}`,
+          }
+        }
+        const response=await fetch(storeProjectsApi,options)
+        const data=await response.json()
+        console.log(data,'storeee.....')
+        setStoreProjects(data)
+      }
+      projects()
     },[])
+    const handleSelectedProject=(title)=>{
+      setSelectedProject(title)
+      setModalVisible(!isModalVisible);
+      
+    }
     const items = [
       { label: 'Project 1', value: 'Project 1' },
       { label: 'Project 2', value: 'Project 2' },
@@ -71,6 +95,10 @@ const Store=({ navigation })=>{
         'http://192.168.1.44:9000/vendorProducts/1692433004877_caffitable.jpg',
         // Add more image URLs as needed
       ];
+      const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+       
+      };
      
       const helllo=()=>{
         navigation.push('StoreProducts', { screen: 'StoreProducts' });
@@ -100,31 +128,20 @@ const Store=({ navigation })=>{
     return(
       <SafeAreaView>
         <ScrollView style={styles.storeContainer}>
-            <Topbar/>
+            {/* <Topbar/> */}
             <View style={styles.projectSelectView}>
                 <View>
-            <Text style={styles.label}>Select Project:</Text>
-            <Picker   style={styles.picker}
-        itemStyle={styles.pickerItem}>
-            <Picker.Item label="Option 1" value="option1"  style={{color:'red'}} />
-        <Picker.Item label="Option 2" value="option2" />
-        <Picker.Item label="Option 3" value="option3" />
-            </Picker>
-      {/* <RNPickerSelect
-        placeholder={placeholder}
-        items={items}
-        onValueChange={(value) => setSelectedValue(value)}
-        style={pickerSelectStyles}
-        value={selectedValue}
-      /> */}
+                  <TouchableOpacity onPress={toggleModal}>
+                  <Text style={styles.label}>Select Project <AntDesign name="down" style={{fontSize:15,fontWeight:'bold'}}/></Text>
+
+                  </TouchableOpacity>
+         <Text style={{fontSize:15,marginLeft:10}}>{selectedProject}</Text>
       </View>
       <TextInput
           style={styles.input}
           placeholder="  Search"
-        
         />
             </View >
-            
             <View   style={Platform.OS==='ios'  ?(styles.androidSliderView):(styles.sliderView)}>
               {Platform.OS==='ios' ?
                <Swiper style={styles.wrapper} showsButtons={true}>
@@ -144,7 +161,6 @@ const Store=({ navigation })=>{
       <Image source={{ uri: "http://godfatherstyle.com/wp-content/uploads/2015/12/Interior-Design-Ideas-.jpg" }} style={styles.image} resizeMode='contain' />
       </View>
     </Swiper>}
-  
             </View>
             <View style={styles.exploreTextView}>
       <Text style={styles.exploreText}>Explore</Text>
@@ -156,14 +172,12 @@ const Store=({ navigation })=>{
       renderItem={renderItem}
       keyExtractor={(item) => item.productId}
       horizontal={true}
-      
       onPress={navigateToNewDetails}
-
     />
            </ScrollView> 
            <View style={styles.exploreTextView}>
       <Text style={styles.exploreText}>Popular Brands</Text>
-      <Text style={styles.exploreText}>Show all</Text>
+      <Text style={styles.exploreText} >Show all</Text>
       </View> 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <FlatList
@@ -187,6 +201,28 @@ const Store=({ navigation })=>{
       showsHorizontalScrollIndicator={false} // Hide the scrollbar
     />
            </ScrollView> 
+           <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={toggleModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        style={styles.modal}>
+        <View style={styles.modalContent}>
+            <View style={styles.popupModelView}>
+            <TouchableOpacity onPress={toggleModal}>
+            <AntDesign name="closecircle" style={styles.closeIcon}/>
+          </TouchableOpacity>
+          <Text style={{textAlign:'center',fontSize:14,fontWeight:'bold'}}>Select Project</Text>
+               <View style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100%'}}>
+                {storeProjects.map(eachProject=>
+                <StoreProjects projectDetails={eachProject} key={eachProject.projectId} handleSelectedProject={handleSelectedProject}/>
+                  )}
+               
+               </View>
+            </View>
+         
+        </View>
+      </Modal>
         </ScrollView>
         </SafeAreaView>
     )
@@ -236,19 +272,19 @@ const styles=StyleSheet.create({
 },
     wrapper: {},
     slide: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     },
     mobileImage:{
-      width:'100%',
-      height:250,
+    width:'100%',
+    height:250,
     flex: 1,
     borderRadius:8
     },
     image: {
-        width:'100%',
-        height:400,
+      width:'100%',
+      height:400,
       flex: 1,
       borderRadius:8
     },
@@ -268,8 +304,7 @@ const styles=StyleSheet.create({
       marginTop:20
     },
     input: {
-        fontSize: 13,
-       
+        fontSize: 13,   
         width: wp("50%"),
         height:30,
         marginTop:30,
@@ -281,47 +316,54 @@ const styles=StyleSheet.create({
     storeContainer:{
         width:wp('100%'),
         height:hp('80%'),
-        
         marginBottom:160
-       
-       
     },
     projectSelectView:{
         width:wp('100%'),
         display:'flex',
         flexDirection:'row',
         justifyContent:'space-between'
-
     },
     label: {
-        fontSize: 18,
+        fontSize: 15,
         marginBottom: 10,
+        fontWeight:'bold',
+        marginLeft:10
       },
       selectedValue: {
         marginTop: 20,
         fontSize: 16,
       },
+      container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      modal: {
+        margin: 0,
+        justifyContent: 'flex-end',
+      },
+      modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
+    homeContainer:{
+        display:'flex',
+        flexDirection:'row',
+    },logoImage:{
+        width:150,
+        height:60,
+        resizeMode:"contain",
+    },closeIcon:{
+      fontSize:25,
+      color:'#ca9881',
+      marginLeft:'auto'
+  },
+  rightView:{
+    height:12,
+    width:200,
+    
+  }
 })
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-      fontSize: 13,
-      paddingVertical: 6,
-      paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: 'gray',
-      borderRadius: 4,
-      color: 'black',
-      paddingRight: 30,
-    },
-    inputAndroid: {
-      fontSize: 16,
-      paddingHorizontal: 10,
-      paddingVertical: 8,
-      borderWidth: 0.5,
-      borderColor: 'purple',
-      borderRadius: 8,
-      color: 'red',
-      paddingRight: 30,
-    },
-  });
-  

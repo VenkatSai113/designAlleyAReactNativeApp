@@ -37,6 +37,7 @@ import Notifications from './Notifications/index'
 import SavedPosts from './SavedPosts/index'
 import SavedPostHome from './Home/savedPosts'
 import UserProfileEditor from './SampleImageUpload/index'
+import LikedPosts from './Activity/likedPosts'
 
 const StoreStackScreen = () => (
   <HomeStack.Navigator>
@@ -76,6 +77,7 @@ const DashboardStackScreen=()=>(
   <HomeStack.Screen name="SideProfile" component={SideProfile}  />
   <HomeStack.Screen name="Projects" component={Projects}  />
   <HomeStack.Screen name="Activity" component={Activity}  />
+  <HomeStack.Screen name="LikedPosts" component={LikedPosts}  />
   </HomeStack.Navigator>
 )
 
@@ -101,7 +103,7 @@ export default function BottomNavbar() {
     <NavigationContainer>
       <Tab.Navigator
        initialRouteName="UserProfileEditor">
-        <Tab.Screen name="UserProfileEditor" component={UserProfileEditor}  options={{ headerShown: false,
+        <Tab.Screen name="Home" component={Home}  options={{ headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home"  color={color} size={size} />
