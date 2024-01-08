@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/dA LOGO -2.png",
     "userInterfaceStyle": "light",
-    
     "splash": {
       "image": "./assets/dA LOGO -2.png",
       "resizeMode": "contain",
@@ -19,20 +18,23 @@
       "supportsTablet": true
     },
     "android": {
+      
       "adaptiveIcon": {
-        "foregroundImage": "./assets/dA LOGO -2.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.venkatsai113.myapp"
+      "package": "com.venkatsai113.myapp",
+      "googleServiceFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiBaseUrl": "http://192.168.1.44:9000/",
+      "apiBaseUrl": "http://192.168.1.36:9000/",
       "eas": {
         "projectId": "84fb3f92-496b-406d-a255-7232cef7343f"
       }
-    }
+    },
+    "owner": "venkatsai113"
   }
 }

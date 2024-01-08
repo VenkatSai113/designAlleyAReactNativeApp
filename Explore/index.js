@@ -20,7 +20,7 @@ const Explore=({ navigation })=>{
     useEffect(()=>{
         const getJwtToken=async()=>{
         const jwtToken = await AsyncStorage.getItem('jwtToken');
-        const feedUrl="http://192.168.1.44:9000/feedData"
+        const feedUrl="http://192.168.1.36:9000/feedData"
         const options={
             method:"GET",
             headers:{
@@ -34,7 +34,6 @@ const Explore=({ navigation })=>{
         const data=await response.json();
         setFeedDetails(data)
         console.log(data)
-      
         }
         getJwtToken()
     },[])
@@ -97,7 +96,7 @@ const Explore=({ navigation })=>{
         
         try {
           const jwtToken = await AsyncStorage.getItem('jwtToken');
-          const feedUrl = iconName === 'All' ? 'http://192.168.1.44:9000/feedData' : `http://192.168.1.44:9000/filterdData/?type=${iconName}`;
+          const feedUrl = iconName === 'All' ? 'http://192.168.1.36:9000/feedData' : `http://192.168.1.36:9000/filterdData/?type=${iconName}`;
           const options = {
             method: 'GET',
             headers: {
@@ -129,10 +128,8 @@ const Explore=({ navigation })=>{
          <View style={styles.bottomIconView}>                                
           <MaterialCommunityIcons name="grid" style={styles.imageIcon} onPress={() => videoClick("All")}/>
           </View>
-         
           <View style={styles.bottomIconView} >
-          <Feather name="image" style={styles.fatherImageIcon}   onPress={() => videoClick("image")}/>
-        
+          <Feather name="image" style={styles.fatherImageIcon}   onPress={() => videoClick("image")}/>        
          </View>
          <View style={styles.bottomIconView}>
       <Octicons
@@ -143,7 +140,6 @@ const Explore=({ navigation })=>{
     </View>
           <View style={styles.bottomIconView}>
           <MaterialCommunityIcons name="virtual-reality" style={styles.imageIcon}  onPress={() => videoClick("virtualTourImage")} />
-        
           </View>
          </View>
             <ScrollView style={{height:hp('100%')}} >

@@ -10,7 +10,7 @@ const SavedPosts=()=>{
     useEffect(()=>{
         const savedPostsApiCall=async()=>{
             const jwtToken=await AsyncStorage.getItem('jwtToken')
-            const apiUrl='http://192.168.1.44:9000/getSavedPost'
+            const apiUrl='http://192.168.1.36:9000/getSavedPost'
             const options={
                 method:'GET',
                 headers:{

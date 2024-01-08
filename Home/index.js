@@ -26,7 +26,7 @@ const Home=()=>{
        const savedPosttsFun=async()=>{
             // const postInfo1={selectedPostId1,hello:"hello"}
         const jwtToken=await AsyncStorage.getItem('jwtToken')
-        const apiUrl='http://192.168.1.44:9000/designerSelectedPost'
+        const apiUrl='http://192.168.1.36:9000/designerSelectedPost'
         const option={
             method:'POST',
             headers:{
@@ -47,7 +47,7 @@ const Home=()=>{
       
     const jwtToken = await AsyncStorage.getItem('jwtToken');
     console.log(jwtToken,'jwtTokenjwtTokenjwtTokenjwtToken')
-    const feedUrl="http://192.168.1.44:9000/feedData"
+    const feedUrl="http://192.168.1.36:9000/feedData"
     const options={
         method:"GET",
         headers:{
@@ -64,7 +64,7 @@ const Home=()=>{
 }
     const logedInUser=async()=>{
         const jwtToken = await AsyncStorage.getItem('jwtToken');
-        const logUrl="http://192.168.1.44:9000/logedInUser"
+        const logUrl="http://192.168.1.36:9000/logedInUser"
     const options={
         method:"GET",
         headers:{

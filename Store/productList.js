@@ -15,7 +15,7 @@ const ProductList=(props)=>{
              <Col   md={6} lg={4}>
     <TouchableOpacity  style={{color:"#fff"}} onPress={hiii}>
   <View style={styles.productCard}>
-    <Image source={{ uri: `http://192.168.1.44:9000/${splitedImages}` }} style={{ width: '100%', height: 200, borderRadius: 8 }} />
+    <Image source={{ uri: `http://192.168.1.36:9000/${splitedImages}` }} style={{ width: '100%', height: 200, borderRadius: 8 }} />
     <Text style={styles.brandText}>{title}</Text>
     <Text  style={styles.brandText}>{brandName}</Text>
   </View>

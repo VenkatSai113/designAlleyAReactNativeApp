@@ -38,6 +38,10 @@ import SavedPosts from './SavedPosts/index'
 import SavedPostHome from './Home/savedPosts'
 import UserProfileEditor from './SampleImageUpload/index'
 import LikedPosts from './Activity/likedPosts'
+import EstimateList from './Projects/EstimateList/index'
+import EditEstimate from './Projects/EstimateList/editEstimate'
+import PushNotification from './Pushnotification/index'
+import SharedPost from './Home/sharedPost'
 
 const StoreStackScreen = () => (
   <HomeStack.Navigator>
@@ -48,13 +52,15 @@ const StoreStackScreen = () => (
 );
 const ProjectStackScreen=()=>(
   <HomeStack.Navigator>
- <HomeStack.Screen name="Projects" component={Projects} />
+  <HomeStack.Screen name="Projects" component={Projects} />
   <HomeStack.Screen name="UpcomingProjects" component={UpcomingProjects} />
   <HomeStack.Screen name="OngoingProjects" component={OngoingProjects} />
   <HomeStack.Screen name="UpcomingSpacesses" component={UpcomingSpacesses} />
   <HomeStack.Screen name='SpaceDetails' component={SpaceDetails} />
   <HomeStack.Screen name='OngoingSpace' component={OngoingSpace} />
   <HomeStack.Screen name='FinalizedDesigns' component={FinalizedDesigns} />
+  <HomeStack.Screen name='EstimateList' component={EstimateList} />
+  <HomeStack.Screen name='EditEstimate' component={EditEstimate} />
 </HomeStack.Navigator>
 );
 const HomeStackScreen=()=>(
@@ -62,6 +68,7 @@ const HomeStackScreen=()=>(
   <HomeStack.Screen name="Home" component={Home}  options={{headerShown: false}}/>
   <HomeStack.Screen name="Dashboard" component={Dashboard} options={{headerShown: false}} />
   <HomeStack.Screen name="SideProfile" component={SideProfile}  />
+  <HomeStack.Screen name="SharedPost" component={SharedPost}  />
   <HomeStack.Screen name="SavedPosts" component={SavedPosts} />
   <HomeStack.Screen name="savedpostHome" component={SavedPostHome} />
   <HomeStack.Screen name="Notifications" component={Notifications} />
@@ -103,7 +110,7 @@ export default function BottomNavbar() {
     <NavigationContainer>
       <Tab.Navigator
        initialRouteName="UserProfileEditor">
-        <Tab.Screen name="Home" component={Home}  options={{ headerShown: false,
+        <Tab.Screen name="Home" component={HomeStackScreen}  options={{ headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home"  color={color} size={size} />

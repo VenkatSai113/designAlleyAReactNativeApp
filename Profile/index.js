@@ -23,7 +23,7 @@ const Profile=({ navigation })=>{
     useEffect(()=>{
         const profileInfo=async()=>{
             const jwtToken=await AsyncStorage.getItem('jwtToken')
-            const apiUrl='http://192.168.1.44:9000/profileData';
+            const apiUrl='http://192.168.1.36:9000/profileData';
             const options={
                 method:'GET',
                 headers:{
@@ -39,7 +39,7 @@ const Profile=({ navigation })=>{
           
           const poistJwtToken=await AsyncStorage.getItem('jwtToken')
           
-          const postApiUrl="http://192.168.1.44:9000/profileAllposts"
+          const postApiUrl="http://192.168.1.36:9000/profileAllposts"
         const postOptions={
             headers:{
                 "Content-Type":"Application/json",
@@ -111,7 +111,7 @@ const Profile=({ navigation })=>{
          <Topbar/>
          <View style={styles.profileView}>
            <View style={styles.profileImageView}>
-            <Image style={styles.profileImage1} source={{uri:`http://192.168.1.44:9000/${profileData.logo}`}}/>
+            <Image style={styles.profileImage1} source={{uri:`http://192.168.1.36:9000/${profileData.logo}`}}/>
            <Text style={styles.designerNameStyle}>{profileData.desigener_name}</Text>
            </View>
            <View style={styles.profileContainer}>

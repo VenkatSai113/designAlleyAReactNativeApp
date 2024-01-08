@@ -3,19 +3,23 @@ import { useNavigation } from '@react-navigation/native';
 const UpcomingSpaceCard=(props)=>{
     const navigation = useNavigation();
     const {spaceDetails}=props
-  const {spaceName,spaceImage}=spaceDetails
+  const {spaceName,spaceImage,spaceId}=spaceDetails
     const deviceSize= Dimensions.get('window').width
     const hello=()=>{
         console.log("Hello")
     }
     const handleChildClick=(childMessage)=>{
-        navigation.push('SpaceDetails', { screen: 'SpaceDetails' });
+        const params = {
+            spaceId: spaceId,
+            spaceImage:spaceImage
+          };
+          navigation.navigate('SpaceDetails', params,{ screen: 'SpaceDetails' });
       }
     
     return(
         <TouchableOpacity style={deviceSize>786?styles.largeDeviceUpcomingCard :styles.upcomingCard} onPress={handleChildClick}>
            <View>
-            <Image source={{uri:`http://192.168.1.44:9000/${spaceImage}`}} style={styles.cardImage} />
+            <Image source={{uri:`http://192.168.1.36:9000/${spaceImage}`}} style={styles.cardImage} />
             <Text style={styles.projectName}>{spaceName}</Text>
            </View>
            </TouchableOpacity>

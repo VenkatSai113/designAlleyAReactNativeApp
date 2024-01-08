@@ -75,7 +75,7 @@ const onChangeverifyOtp=(text)=>{
     let hello="hi"
     console.log('hello')
       const extra= {phoneNumber,hello}
-      const url="http://192.168.1.44:9000/checkingPhonenumbers/"
+      const url="http://192.168.1.36:9000/checkingPhonenumbers/"
       const options={
         method:"POST",
         headers:{

@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import OngoingSpaceCard from './OngoingSpaceCard'; 
 
-
 const OngoingSpace=({navigation})=>{
  
     const [isModalVisible, setModalVisible] = useState(false);
@@ -31,7 +30,7 @@ const OngoingSpace=({navigation})=>{
         console.log(projectId)
         setProjectId(projectId)
         const spaceDetails={projectId,hello:"hello"}
-        const apiUrl="http://192.168.1.44:9000/spaceCards";
+        const apiUrl="http://192.168.1.36:9000/spaceCards";
         const options={
           method:'POST',
           headers:{
@@ -103,7 +102,7 @@ const OngoingSpace=({navigation})=>{
             console.log(pair[0]+ ', ' + pair[1]); 
           }
       
-          const response = await axios.post('http://192.168.1.44:9000/createSpaces', formData, {
+          const response = await axios.post('http://192.168.1.36:9000/createSpaces', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -124,7 +123,10 @@ const OngoingSpace=({navigation})=>{
       const finalizedDesigns=()=>{
         console.log("Hello")
       }
-      
+      const params={projectId:projectId}
+      const handleEstimate=()=>{
+        navigation.replace('EstimateList',params, { screen: 'EstimateList' });
+      }
     return(
         <SafeAreaView>
             <StatusBar backgroundColor='#fff'/>
@@ -164,10 +166,10 @@ const OngoingSpace=({navigation})=>{
                     <TouchableOpacity onPress={finalizedDesigns}>
                 <Image source={require('../../assets/design.png')}  style={styles.tabIcons} resizeMode='contain'/>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleEstimate}>
                 <Image source={require('../../assets/estimate.png')}  style={styles.tabIcons} resizeMode='contain'/>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity >
                 <Image source={require('../../assets/payments.png')}  style={styles.tabIcons} resizeMode='contain'/>
                 </TouchableOpacity>
                 <TouchableOpacity>

@@ -13,6 +13,7 @@ import SwipeableViews from 'react-swipeable-views-native';
 import { Video, ResizeMode } from 'expo-av';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { TextInput } from 'react-native-paper';
+import Share from 'react-native-share';
 
 const FeedContainer=(props)=>{
     const video = React.useRef(null);
@@ -33,12 +34,13 @@ const FeedContainer=(props)=>{
     },[])
     
     const toggleModal = () => {
+     
       setModalVisible(!isModalVisible);
     };
     const toggleCommentModal=async()=>{
         setCommentModal(!commentModal)
         const commentPostId={comment:"comment",postId}
-        const commentPostUrl='http://192.168.1.44:9000/viewComments'
+        const commentPostUrl='http://192.168.1.36:9000/viewComments'
         const options={
             method:'POST',
             headers:{
@@ -70,7 +72,7 @@ const FeedContainer=(props)=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken');
         setSavePostStatue(!savePostStatue) 
         const postIds={postId,hello:"hello"}
-        const savedApiUrl="http://192.168.1.44:9000/deleteSavedPost";
+        const savedApiUrl="http://192.168.1.36:9000/deleteSavedPost";
         const options={
           method:"post",
           headers:{
@@ -87,7 +89,7 @@ const FeedContainer=(props)=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken')
         setSavePostStatue(!savePostStatue)       
         const postIds={postId,hello:"hello"}
-        const savedApiUrl="http://192.168.1.44:9000/savedPost";
+        const savedApiUrl="http://192.168.1.36:9000/savedPost";
         const options={
           method:"post",
           headers:{
@@ -106,7 +108,7 @@ const FeedContainer=(props)=>{
     const commentPost=async()=>{
         const jwtToken=await AsyncStorage.getItem('jwtToken')
         const comments={comment,postId}
-        const commentsUrl='http://192.168.1.44:9000/comments'
+        const commentsUrl='http://192.168.1.36:9000/comments'
         const options={
             method:'POST',
             headers:{
@@ -132,7 +134,6 @@ const FeedContainer=(props)=>{
         const postDate = new Date(createdAt);
         const currentDate = new Date();
         const timeDiff = currentDate - postDate;
-    
         // Calculate the time difference in milliseconds, seconds, minutes, hours, days, months, and years
         const secondsDiff = Math.floor(timeDiff / 1000);
         const minutesDiff = Math.floor(secondsDiff / 60);
@@ -140,7 +141,6 @@ const FeedContainer=(props)=>{
         const daysDiff = Math.floor(hoursDiff / 24);
         const monthsDiff = Math.floor(daysDiff / 30);
         const yearsDiff = Math.floor(monthsDiff / 12);
-    
         if (yearsDiff >= 1) {
           return `${yearsDiff} ${yearsDiff === 1 ? 'year' : 'years'} ago`;
         } else if (monthsDiff >= 1) {
@@ -159,8 +159,6 @@ const FeedContainer=(props)=>{
         const postDate = new Date(commentsCreatedAt);
         const currentDate = new Date();
         const timeDiff = currentDate - postDate;
-    
-        
         // Calculate the time difference in milliseconds, seconds, minutes, hours, days, months, and years
         const secondsDiff = Math.floor(timeDiff / 1000);
         const minutesDiff = Math.floor(secondsDiff / 60);
@@ -168,7 +166,6 @@ const FeedContainer=(props)=>{
         const daysDiff = Math.floor(hoursDiff / 24);
         const monthsDiff = Math.floor(daysDiff / 30);
         const yearsDiff = Math.floor(monthsDiff / 12);
-    
         if (yearsDiff >= 1) {
           return `${yearsDiff} ${yearsDiff === 1 ? 'year' : 'years'} ago`;
         } else if (monthsDiff >= 1) {
@@ -183,29 +180,52 @@ const FeedContainer=(props)=>{
           return 'Less than a minute ago';
         }
       };
-
+      const handleSharePost=()=>{
+        const params={postId}
+        navigation.navigate('SharedPost',params, { screen: 'SharedPost' });
+        // navigation.navigate('SharedPost',{ screen: 'SharedPost' });
+       
+      }
+      const shareOnWhatsApp = async () => {
+        try {
+          const shareOptions = {
+            title: 'Share via',
+            message: 'Your message goes here',
+            url: 'https://www.your-website.com', // optional, you can also share a URL
+            social: Share.Social.WHATSAPP,
+          };
+      
+          const result = await Share.shareSingle(shareOptions);
+      
+          if (result.action === Share.sharedAction) {
+            console.log('Shared successfully');
+          } else if (result.action === Share.dismissedAction) {
+            console.log('Share was dismissed');
+          }
+        } catch (error) {
+          console.error('Error sharing:', error.message);
+        }
+      };
+      
     return(
         <View >
         <View style={[styles.homeMainContainer, screenWidth<786?{width:wp('95%'),marginLeft:wp('2%')}:{width:wp ('50%'),marginLeft:wp('2%')}]}>
         {/* {splitedImages.length===1 &&postType=="image"?<TouchableOpacity  >
-           <Image    source={{uri:`http://192.168.1.44:9000/${thumbnail}`}}  style={styles.feedImage}/>
+           <Image    source={{uri:`http://192.168.1.36:9000/${thumbnail}`}}  style={styles.feedImage}/>
           </TouchableOpacity>:
           <SwipeableViews style={styles.slideContainer}>
              {splitedImages.map(eachImage=>
-                <Image    source={{uri:`http://192.168.1.44:9000/${eachImage}`}}  style={styles.feedImage}/>
+                <Image    source={{uri:`http://192.168.1.36:9000/${eachImage}`}}  style={styles.feedImage}/>
                 )}
-            </SwipeableViews>} */}
-            
-          
-{(postType =="image" || "imageVideo" || "virlTourImage") ?  ((splitedImages.length===1 &&postType=="image")?  <Image source={{uri:`http://192.168.1.44:9000/${thumbnail}`}}  style={styles.feedImage}/>:
+            </SwipeableViews>} */} 
+{(postType =="image" || "imageVideo" || "virlTourImage") ?  ((splitedImages.length===1 &&postType=="image")?  <Image source={{uri:`http://192.168.1.36:9000/${thumbnail}`}}  style={styles.feedImage}/>:
 <SwipeableViews style={styles.slideContainer}>
 {splitedImages.map(eachImage=>{
           if(eachImage.split(".")[1]=="mp4"){
             return(
                 <Video
                 ref={video}
-                
-                source={{uri:`http://192.168.1.44:9000/${eachImage}`}} 
+                source={{uri:`http://192.168.1.36:9000/${eachImage}`}} 
                 useNativeControls
                 resizeMode='contain'
                 isLooping
@@ -215,19 +235,16 @@ const FeedContainer=(props)=>{
             )}
             else{
                 return(
-                <Image source={{uri:`http://192.168.1.44:9000/${eachImage}`}}  style={styles.feedImage}/>
+                <Image source={{uri:`http://192.168.1.36:9000/${eachImage}`}}  style={styles.feedImage}/>
                 )
             }
             })}
 </SwipeableViews>):(splitedImages.length>1)?
-
  <><SwipeableViews>
             {splitedImages.map(eachImage=>
-           
            <Video
            ref={video}
-           
-           source={{uri:`http://192.168.1.44:9000/${eachImage}`}} 
+           source={{uri:`http://192.168.1.36:9000/${eachImage}`}} 
            useNativeControls
            resizeMode='contain'
            isLooping
@@ -236,26 +253,22 @@ const FeedContainer=(props)=>{
          />
            )}</SwipeableViews></>:  <Video
            ref={video}
-           source={{uri:`http://192.168.1.44:9000/${eachImage[0]}`}} 
+           source={{uri:`http://192.168.1.36:9000/${eachImage[0]}`}} 
            useNativeControls
            resizeMode='contain'
            isLooping
            onPlaybackStatusUpdate={status => setStatus(() => status)}
            style={styles.feedImage}
          />}
-
-            
            <View style={styles.homeBottomProfileView}>
             <View style={styles.profileNameView}>
-            <Image    source={{uri:`http://192.168.1.44:9000/${logo}`}}  style={screenWidth>786?styles.profileImage:styles.smallScreenProfileImage}/>
+            <Image    source={{uri:`http://192.168.1.36:9000/${logo}`}}  style={screenWidth>786?styles.profileImage:styles.smallScreenProfileImage}/>
             <View style={styles.profileNameTime}>
-            <Text style={styles.designerName}>{deignerName}</Text>
+           <TouchableOpacity onPress={handleSharePost}><Text style={styles.designerName} >{deignerName}</Text></TouchableOpacity>
             <Text style={styles.timeText}>{getTimeElapsed()}</Text>
-            
             </View>
             </View>
               <View>
-                
                 <View style={styles.heartView}>
                     {savePostStatue?<TouchableOpacity onPress={onPressSave}><FontAwesome name="bookmark" style={styles.saveIcon}/></TouchableOpacity>:<TouchableOpacity onPress={onPressUnSave}><Feather name="bookmark" style={styles.saveIcon}/>
                     </TouchableOpacity>}
@@ -263,18 +276,14 @@ const FeedContainer=(props)=>{
                     <AntDesign name="heart" style={styles.unlikeIcon}/>
                     </TouchableOpacity>:<TouchableOpacity onPress={onPressLike}>
                     <AntDesign name="hearto" style={styles.heartIcon}/>
-                    
                     </TouchableOpacity>}
                     <MaterialCommunityIcons name="dots-vertical" style={styles.saveIcon}  onPress={toggleModal} />
                 </View>
-                
             </View>               
            </View>
-           
            <View>
             <Text style={styles.postDescription}>{caption}
 #{postType} #{tags} #{designStyle} #{category} #{location} #{occupancy} #{propertySize}#{duration}</Text>
-
           </View>
         <TouchableOpacity onPress={toggleCommentModal}>
             <Text  style={{ fontSize:14,fontWeight:"normal",padding:5,marginLeft:5}}>View all comments</Text>
@@ -298,10 +307,14 @@ const FeedContainer=(props)=>{
                 <View style={styles.popupModalRowView}>
                     <AntDesign name="delete" style={styles.editIcon}/>
                 <Text style={styles.editPostText}>Delete Post</Text>
-                </View><View style={styles.popupModalRowView}>
+                </View>
+                <TouchableOpacity onPress={shareOnWhatsApp} >
+                <View style={styles.popupModalRowView}>
                     <AntDesign name="sharealt" style={styles.editIcon}/>
                 <Text style={styles.editPostText}>Share Post</Text>
-                </View><View style={styles.popupModalRowView}>
+                </View>
+                </TouchableOpacity>
+                <View style={styles.popupModalRowView}>
                     <AntDesign name="clockcircleo" style={styles.editIcon}/>
                 <Text style={styles.editPostText}>Archive</Text>
                 </View>
@@ -314,7 +327,6 @@ const FeedContainer=(props)=>{
                 <Text style={styles.editPostText}>Send</Text>
                 </View>
             </View>
-         
         </View>
       </Modal> 
       <Modal
@@ -333,29 +345,24 @@ const FeedContainer=(props)=>{
             <Text style={{fontSize:15,fontWeight:'normal',marginTop:20}}>Start the conversation.</Text>
             {/* {comments.map(eachItem=>
                   <View style={styles.commentItemView}>
-                  <Image source={{uri:`http://192.168.1.44:9000/${eachItem.image}`}} style={styles.commentProfile}/>
+                  <Image source={{uri:`http://192.168.1.36:9000/${eachItem.image}`}} style={styles.commentProfile}/>
                   <View style={{marginLeft:15}}>
                       <Text style={styles.commentUserName}>{eachItem.desigener_name}</Text>
                   <Text>{eachItem.comment}</Text>
                   </View>
                   </View>)} */}
-          
           </View> :
-         
-           
             <View style={styles.commentsView}>
             {comments.map(eachItem=>
                   <View style={styles.commentItemView}>
-                  <Image source={{uri:`http://192.168.1.44:9000/${eachItem.image}`}} style={styles.commentProfile}/>
+                  <Image source={{uri:`http://192.168.1.36:9000/${eachItem.image}`}} style={styles.commentProfile}/>
                   <View style={{marginLeft:15}}>
                       <Text style={styles.commentUserName}>{eachItem.desigener_name}</Text>
                   <Text>{eachItem.comment}</Text>
                   <Text style={{fontSize:10}}>{commentTimeElapsed(eachItem.commentsCreatedAt)}</Text>
                   </View>
                   </View>)}
-          
           </View>}
-              
             </ScrollView>
             <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginTop:10}}>
                 <TextInput style={{width:'85%',height:40}} placeholder='Add a comment...' onChangeText={onChangeText} value={comment}></TextInput>
@@ -363,11 +370,9 @@ const FeedContainer=(props)=>{
                     <Text style={styles.postText} >Post</Text>
                 </TouchableOpacity>
             </View>
-         
         </View>
       </Modal> 
         </View>
-       
     )
 }
 export default FeedContainer

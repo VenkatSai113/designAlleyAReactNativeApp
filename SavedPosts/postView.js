@@ -10,7 +10,7 @@ const SavedPostList=(props)=>{
     }
     return(
         <TouchableOpacity onPress={previewSavedPosts}>
-            <Image source={{uri:`http://192.168.1.44:9000/${thumbnail}`}} style={styles.savedImages}/> 
+            <Image source={{uri:`http://192.168.1.36:9000/${thumbnail}`}} style={styles.savedImages}/> 
         </TouchableOpacity>
 
     )

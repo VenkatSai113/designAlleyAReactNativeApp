@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import UpcomingSpaceCard from './spaceCards'
 import Constants from 'expo-constants';
-const apiBaseUrl = 'http://192.168.1.44:9000'; // Replace with your machine's local IP and port
+const apiBaseUrl = 'http://192.168.1.36:9000'; // Replace with your machine's local IP and port
 const UpcomingSpacesses=()=>{
  
     const [isModalVisible, setModalVisible] = useState(false);
@@ -30,7 +30,7 @@ const UpcomingSpacesses=()=>{
         console.log(projectId)
         setProjectId(projectId)
         const spaceDetails={projectId,hello:"hello"}
-        const apiUrl="http://192.168.1.44:9000/spaceCards";
+        const apiUrl="http://192.168.1.36:9000/spaceCards";
         const options={
           method:'POST',
           headers:{

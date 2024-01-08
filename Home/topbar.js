@@ -11,8 +11,6 @@ const Topbar=()=>{
     const screenWidth=Dimensions.get("window").width
     const notificationScreen=()=>{
         navigation.push('Notifications', { screen: 'Notifications' });
-
-
     }
     const nevigateDashboard=()=>{
         navigation.push('SideProfile', { screen: 'SideProfile' });

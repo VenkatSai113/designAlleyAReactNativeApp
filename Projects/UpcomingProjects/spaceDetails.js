@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views-native';
 import { Table, Row, Rows } from 'react-native-table-component';
+import { DataTable } from 'react-native-paper'; 
+import SpaceProductsTable from './spaceProductsTable'
 
 const getDeviceSize = () => {
     const screenWidth = Dimensions.get('window').width; 
@@ -17,91 +19,102 @@ const getDeviceSize = () => {
       return 'medium';
     }
   };
-const SpaceDetails=()=>{
+const SpaceDetails=({ route })=>{
+    const {  spaceId,spaceImage } = route.params;
+    console.log(spaceImage,"spaceImageeeee")
+    
     const deviceSize = getDeviceSize();
     const [singleProduct,setSingleProduct]=useState('')
     const [productImages,setProductImages]=useState([])
+    const [spaceProducts,setSpaceProducts]=useState([])
     const [stateTableData,setStateTableData]=useState({ tableHead: ['Item Description', 'Units', 'Qty'],
-    tableData: [
+    tableData: 
+    [
       ['1dfgdfgdfgdfgdf ggdsgf sdfsdfsdfsdf sdfsdfsdfsdxcvxcvxcv ssdfsdfsdfsdf sdfsdfsdfsdferwe wwerwerwerwerwerwe werfsfsdfsdf sdfsdfsd sdfsdfsd fsdfsdfsd sdfsdfsdfsdfsdfsdfsd sdfsdfs sdfsdfsdfsdf sdfsdf', '2', '3'],
       ['a', 'b', 'c'],
       ['1', '2', '3'],
       ['a', 'b', 'c']
-    ]})
+    ]
+})
     useEffect(()=>{
+        
         const singleProductView=async()=>{
-            const parseProductId=await AsyncStorage.getItem("singleProductId")
-            const productId=JSON.parse(parseProductId)
             const jwtToken=await AsyncStorage.getItem('jwtToken')
-            const productDetails={productId,hello:"hello"}
-            const apiUrl='http://192.168.1.44:9000/productDetailview'
+            const spaceDetails={spaceId,hello:"hello"}
+            const apiUrl='http://192.168.1.36:9000/spaceProducts'
             const options={
                 method:'POST',
                 headers:{
                     'Content-Type':'Application/json',
                     'Authorization':`Bearer ${jwtToken}`
                 },
-                body:JSON.stringify(productDetails)
+                body:JSON.stringify(spaceDetails)
             }
             const response=await fetch(apiUrl,options)
             const data=await response.json()
-            setSingleProduct(data)
-            console.log(data.thumbnail)
-            const splitedImages=data.thumbnail.split(',')
-            setProductImages(splitedImages)
+            console.log(data)
+            setSpaceProducts(data)
+            // setSingleProduct(data)
+            // console.log(data.thumbnail)
+            // const splitedImages=data.thumbnail.split(',')
+            // setProductImages(splitedImages)
+          
 
            
         }
         singleProductView()
     },[])
-      
+      const deleteSpaceProduct=async(projectSpaceProductId)=>{
+        setSpaceProducts([])
+        const jwtToken=await AsyncStorage.getItem("jwtToken")
+        const apiUrl=`http://192.168.1.36:9000/deleteSpaceProducts?spaceProductId=${projectSpaceProductId}&spaceId=${spaceId}`
+        const options={
+            method:'DELETE',
+            headers:{
+              "Content-Type":"Application/json",
+              "Authorization":`Bearer ${jwtToken}`
+            }
+          }
+          const response=await fetch(apiUrl,options)
+          const data=await response.json()
+          console.log(data)
+          setSpaceProducts(data)
+       
+      }
     return(
         <SafeAreaView>
             <StatusBar backgroundColor='#fff'/>            
             <ScrollView style={{width:wp('99%'),height:hp('80%'),margin:0,padding:0}} showsVerticalScrollIndicator={false}>
-          
                 <View style={ deviceSize === 'large'?     {display:'flex',flexDirection:'row',}:{display:'flex',flexDirection:'column',}}>
                     
                     {productImages.length===0?
-                     <Image source={{uri:`http://192.168.1.44:9000/feedUploads/1697444271494_interior-design-of-a-house-1571460.jpg`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
+                     <Image source={{uri:`http://192.168.1.36:9000/${spaceImage}`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
                     :<SwipeableViews>{productImages.map(eachProduct=>
-                        <Image source={{uri:`http://192.168.1.44:9000/feedUploads/1697444271494_interior-design-of-a-house-1571460.jpg`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
+                        <Image source={{uri:`http://192.168.1.36:9000/feedUploads/1697444271494_interior-design-of-a-house-1571460.jpg`}} resizeMode='contain' style={ deviceSize === 'large'?styles.webProductImage:styles.productImage}  />
                             )}</SwipeableViews>
                             }
                     
         
          <View>
          <View >
-                    {/* <View style={ deviceSize === 'large'?  styles.largeDeviceCard:styles.smallDeviceCard}>
-                        <View>
-                    <Text style={styles.brandName}>{singleProduct.brandName}</Text>
-                    <Text style={styles.byName}>By:{singleProduct.title}</Text>
-                    <Text  style={styles.byName}>SUK:9000</Text>
-                 </View>
-                 <View>
-                        <Text style={styles.saveIcon}><Feather name="bookmark" style={{fontSize:25}}/></Text>
-                    </View>
-                    </View>  */}
-                    
-                    {/* <View style={ deviceSize === 'large'?  styles.largeDeviceCard:styles.smallDeviceCard}>
-                        <View>
-                            <Text style={styles.brandName}>₹{singleProduct.price}</Text>
-                        </View>
-                        <View>
-                        
-                            <Text style={styles.brandName}>Quantity: </Text>
-                            <TextInput
-        style={{ height: 30,width:80, borderColor: 'gray', borderWidth: 1, marginBottom: 10, padding: 8,borderRadius:3 }}
-        placeholder="Qty..."
-      />
-                        </View>
-                    </View> */}
+                   
                   <View style={ deviceSize === 'large'?  styles.largeDeviceDescription:styles.smallDeviceDescription}>
                   <View style={styles.container}>
-        <Table borderStyle={{borderWidth: 2, borderColor: 'gray'}}>
-          <Row data={stateTableData.tableHead} style={styles.head} textStyle={styles.text}/>
-          <Rows data={stateTableData.tableData} textStyle={styles.text}/>
-        </Table>
+                  <DataTable style={styles.container}> 
+      <DataTable.Header style={styles.tableHeader}> 
+        <DataTable.Title>Item</DataTable.Title> 
+        <DataTable.Title>Units</DataTable.Title> 
+        <DataTable.Title>Quentity</DataTable.Title> 
+        <DataTable.Title>Delete</DataTable.Title>
+         
+      </DataTable.Header> 
+      {spaceProducts.map(eachItem=>
+      <SpaceProductsTable spaceProducts={eachItem} key={eachItem.productId} deleteSpaceProduct={deleteSpaceProduct}/>
+        )}
+      
+  
+      
+    </DataTable> 
        
         
       </View>
@@ -153,7 +166,7 @@ const SpaceDetails=()=>{
                 
               {/* <Row>
                 <Col md={6}>
-               <Image source={{uri:"http://192.168.1.44:9000/feedUploads/1691661773771_31 - Copy.jpg"}} resizeMode='contain' style={[styles.productImage,Platform.OS==='web' && styles.webProductImage]} />
+               <Image source={{uri:"http://192.168.1.36:9000/feedUploads/1691661773771_31 - Copy.jpg"}} resizeMode='contain' style={[styles.productImage,Platform.OS==='web' && styles.webProductImage]} />
                 </Col>
                 <Col md={6} style={{backgroundColor:'red'}}>
                     <View style={{width:wp('90%'),display:'flex',flexDirection:'row',justifyContent:'space-between',marginLeft:20,}}>
@@ -183,6 +196,12 @@ const styles=StyleSheet.create({
         fontWeight:'normal',
         color:'#fff'
     },
+    container: { 
+        padding: 10, 
+      }, 
+      tableHeader: { 
+        backgroundColor: '#DCDCDC', 
+      }, 
     touchableButton:{
         marginTop:15,
         height:30,
